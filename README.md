@@ -38,8 +38,8 @@ Without any interest, we publish this library altruistically."
    to point to that you downloaded.   
    
 # Extra libraries    
-* To calibrate the FT81x screens in STM32Fx we need an external EEPROM. You can download the AT24C32 library from 
-* Library SdFat
+* AT24C32 library to calibrate the FT81x screens in STM32Fx we need an external EEPROM. 
+* Library SdFat for multimedia support
 
 # Tips
 * These screens have a problem, being the length of the SPI BUS cables. The purpose is to be very short, between 7 and 10 mm. Also a tip is to use on this same SPI BUS some pull-up resistors. 
