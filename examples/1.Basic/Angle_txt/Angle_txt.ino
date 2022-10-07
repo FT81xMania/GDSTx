@@ -6,8 +6,8 @@ void setup()
 {
   GD.begin();
   Background.fromfile("dog.jpg");
-  //SaidHello.fromtext(28, "Teensy 4@FT8XX");
-  SaidHello.fromtext(28, "STM32@FT8XX");
+  SaidHello.fromtext(28, "Teensy 4@FT8XX");
+  //SaidHello.fromtext(28, "STM32@FT8XX");
   MP();
 }
 void loop(){}
