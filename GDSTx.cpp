@@ -609,8 +609,7 @@ LOW_FREQ_BOUND = 47040000UL;  //
 }
 
 if (SizeFT813==52){                    //BT815
-//LOW_FREQ_BOUND = 49000000UL;  //funciona  SPI-32000000
-LOW_FREQ_BOUND = 55000000UL;    //funciona  SPI-32000000   
+LOW_FREQ_BOUND = 49000000UL;    //funciona  SPI-32000000    mayor frecuencia resulta en inestabilidad de la pantalla al reproducir videos
 }
 
 if (SizeFT813==53){                    //FT813
