@@ -551,6 +551,27 @@ uint32_t GDClass::measure_freq(void)
 
 void GDClass::tune(void)
 {
+	
+  if (BT8XX==1)
+ {
+  //Serial.print("FT80");  Serial.println(BT8XX, HEX);
+ }
+ 
+ if (BT8XX==19)
+ {
+  //Serial.print("FT8");  Serial.println(BT8XX, HEX); 
+ }
+ 
+ if (BT8XX>19)
+ {
+  //Serial.print("BT8");  Serial.println(BT8XX, HEX); 
+ } 
+ //Serial.print("TFT id: ");  Serial.println(SizeFT813);  Serial.print("SPI-1 speed: ");   Serial.println(SetSPISpeed);
+ //Serial.print("TFT id: ");  Serial.println(SizeFT813);  
+ //Serial.print("SPI-1 speed (MHz): ");   Serial.println(SetSPISpeed/1000000);
+ //Serial.print(rd32(REG_HSIZE));  Serial.print("x");   Serial.print(rd32(REG_VSIZE));    Serial.println(" px");	
+	
+	
  uint32_t LOW_FREQ_BOUND = 32040000UL;   //FT801/801
  LOW_FREQ_BOUND = 47040000UL;          //FT81X/BT815/BT816
 
@@ -589,7 +610,7 @@ LOW_FREQ_BOUND = 47040000UL;  //
 
 if (SizeFT813==52){                    //BT815
 //LOW_FREQ_BOUND = 49000000UL;  //funciona  SPI-32000000
-LOW_FREQ_BOUND = 60000000UL;    //funciona  SPI-32000000   
+LOW_FREQ_BOUND = 55000000UL;    //funciona  SPI-32000000   
 }
 
 if (SizeFT813==53){                    //FT813
@@ -606,24 +627,7 @@ LOW_FREQ_BOUND = 60000000UL;  //  59000000UL   óptimo
  
  //Serial.println("****");
  
-  if (BT8XX==1)
- {
-  //Serial.print("FT80");  Serial.println(BT8XX, HEX);
- }
- 
- if (BT8XX==19)
- {
-  //Serial.print("FT8");  Serial.println(BT8XX, HEX); 
- }
- 
- if (BT8XX>19)
- {
-  //Serial.print("BT8");  Serial.println(BT8XX, HEX); 
- } 
- //Serial.print("TFT id: ");  Serial.println(SizeFT813);  Serial.print("SPI-1 speed: ");   Serial.println(SetSPISpeed);
- //Serial.print("TFT id: ");  Serial.println(SizeFT813);  //Serial.println("SPI-1 speed: ");   Serial.println(SetSPISpeed);
 
- //Serial.print(rd32(REG_HSIZE));  Serial.print("x");   Serial.print(rd32(REG_VSIZE));    Serial.println(" px");
  
  
   uint32_t f;
@@ -710,6 +714,7 @@ void GDClass::begin(int cs) {
   Clear(); swap();
 {
   //switch (ft8xx_model) {
+  //tune();	  
 
     #if(STM32_CPU == 767)
 		Serial.stm32SetRX(PD9);

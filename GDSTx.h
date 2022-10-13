@@ -39,67 +39,67 @@
 
 #include "Arduino.h"
 
-#define JPGsizeX   0
-#define JPGsizeY   0
+#define JPGsizeX   					 0
+#define JPGsizeY   					 0
 
-#define  H743    0
-#define POR_PIN  0
+#define  H743    					 0
+#define POR_PIN  					 0
 
 #if defined(ARDUINO_TEENSY32)
-  #define SD_PIN 			 5
+  #define SD_PIN 			 		 5
 #endif
 
 #if defined(ARDUINO_ARCH_STM32)
 
   #include <AT24Cxx.h>
-  #define EEPROM_SOURCE      0    //1-Usar para MO_38     0-para los demás
+  #define EEPROM_SOURCE      		 0    //1-Usar para MO_38     0-para los demás
 
   #if (EEPROM_SOURCE == 0)
-   #define i2c_address     0x50    //EEPROM breakout like 24FC512
-//   #define i2c_address     0x51  
+   #define i2c_address     		  0x50    //EEPROM breakout like 24FC512
+//   #define i2c_address     	    0x51  
   #endif
 
   #if (EEPROM_SOURCE == 1)
-   #define i2c_address     0x57   //EEPROM on DS3231
+   #define i2c_address     		  0x57   //EEPROM on DS3231
   #endif
 
- #define CS 			   PA4
- #define STM32_CPU         767//4073                              //767, 4073, 411,  476   //4073   M4DEMO y F407VG-Danieleff y SdFat V2 oficial  F411CE-Black
- #define NHDTouch 		   0            //1 cargar rutinas panel tactil    0 NHD normal aparentemente no lo requiere?¿
+ #define CS 			   		   PA4
+ #define STM32_CPU         		   767//4073                              //767, 4073, 411,  476   //4073   M4DEMO y F407VG-Danieleff y SdFat V2 oficial  F411CE-Black
+ #define NHDTouch 		   			 0            //1 cargar rutinas panel tactil    0 NHD normal aparentemente no lo requiere?¿
 
  #if(STM32_CPU == 103) 
-    #define SD_PIN         PB12  //PB12 SPI2-F103   Danieleff-Core          M3DEMO - funciona sin problemas
-    #define SetSDSpeed       36  
+    #define SD_PIN          	  PB12  //PB12 SPI2-F103   Danieleff-Core          M3DEMO - funciona sin problemas
+    #define SetSDSpeed       	 	36  
   #endif 
 
   #if(STM32_CPU == 411) 
-    #define SD_PIN         PB12  //PB12 SPI2-F411CE   Danieleff-Core          funciona sin problemas
-    #define SetSDSpeed       36  
+    #define SD_PIN         		  PB12  //PB12 SPI2-F411CE   Danieleff-Core          funciona sin problemas
+    #define SetSDSpeed       	    36  
   #endif   
   
   #if (STM32_CPU==4110)
-    #define SD_PIN         PB12  //PB12 SPI2-F411CE   STM32-Core  
-    #define SetSDSpeed       48  
+    #define SD_PIN         		  PB12  //PB12 SPI2-F411CE   STM32-Core  
+    #define SetSDSpeed       	    48  
   #endif    
  
  #if(STM32_CPU == 4073) 
-    #define SD_PIN         PB12  //PB12 SPI2-F407VG            funciona sin problemas  M4DEMO
-    #define SetSDSpeed       48
-    //#define POR_PIN        PE1	  //Si funciona XD XD
+    #define SD_PIN          	  PB12  //PB12 SPI2-F407VG            funciona sin problemas  M4DEMO
+    #define SetSDSpeed              48
+    //#define POR_PIN         		  PE1	  //Si funciona XD XD
   #endif  
 
   #if(STM32_CPU == 746) 
-     #define SD_PIN        PA15  //PA15  SPI3 F429 y Core7XXI          no funciona bien revisar variante    
-     #define SetSDSpeed      36  
-     //#define POR_INT       PE0   //STM32 PE0
+     #define SD_PIN        		  PA15  //PA15  SPI3 F429 y Core7XXI          no funciona bien revisar variante    
+     #define SetSDSpeed             36  
+     //#define POR_INT                PE0   //STM32 PE0
   #endif
   
   #if(STM32_CPU == 767) 
      #define mySerialPort3 SerialUART3
      #define Serial mySerialPort3	  
   
-     #define SD_PIN        PB11  //PB11 SPI3-F767, PA11 SPI2-F767      no funciona bien revisar variante
-     #define SetSDSpeed      36  
+     #define SD_PIN        		  PB11  //PB11 SPI3-F767, PA11 SPI2-F767      no funciona bien revisar variante
+     #define SetSDSpeed      	    36  
   #endif  
 
 #endif
@@ -126,80 +126,80 @@
 
 #if defined(ARDUINO_ARCH_STM32)
 
- #define SizeFT813      	 43  //35//43//54//5//0//38  //NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 52-5"BT815, MO: 53-5"FT813, 0 Riverdi FT801 4.3", Riverdi: 54-5"  BT817, Riverdi: 100-10"  BT817
- #define ORIENTACION     	 0  // 0, 1, 2, 3, FT81X/BT81X   0 normal  1-MO38
- #define ROTACION        	 0  // 0,1         FT80x
+ #define SizeFT813      	 		43  //35//43//54//5//0//38  //NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 52-5"BT815, MO: 53-5"FT813, 0 Riverdi FT801 4.3", Riverdi: 54-5"  BT817, Riverdi: 100-10"  BT817
+ #define ORIENTACION     	 		 0  // 0, 1, 2, 3, FT81X/BT81X   0 normal  1-MO38
+ #define ROTACION        	 		 0  // 0,1         FT80x
 
 //*************** User editable line to select EVE TFT size
 #if (SizeFT813==0)
- #define SetSPISpeed   28000000   //14000000
+ #define SetSPISpeed   		  28000000   //14000000
 #endif
 #if (SizeFT813==38)
- #define SetSPISpeed   30000000
+ #define SetSPISpeed   		  30000000
 #endif
 #if (SizeFT813==35)
- #define SetSPISpeed   36000000   //36000000   32000000-para F103VET6
+ #define SetSPISpeed   		  36000000   //36000000   32000000-para F103VET6
 
  #if(STM32_CPU == 103) 
-  #define SetSPISpeed  29000000   //para F103VET6
+  #define SetSPISpeed  		  29000000   //para F103VET6
  #endif 
   
 #endif
 #if (SizeFT813==43)
- #define SetSPISpeed   36000000//36000000
+ #define SetSPISpeed   		  36000000   //36000000
 #endif
 #if (SizeFT813==5)
- #define SetSPISpeed   36000000
+ #define SetSPISpeed   		  36000000
 #endif
 #if (SizeFT813==51)
- #define SetSPISpeed   36000000
+ #define SetSPISpeed   		  36000000
 #endif
 #if (SizeFT813==52)
- #define SetSPISpeed   32000000    //36000000
+ #define SetSPISpeed   		  32000000    //36000000
 
   #if(STM32_CPU == 4073)
-    #define POR_PIN             PE1	  //Si funciona XD XD F407VG
+    #define POR_PIN                PE1	  //Si funciona XD XD F407VG
   #endif
 
   #if(STM32_CPU == 411)
-    #define POR_PIN             PA8	  //Si funciona XD XD F411CE-Black
+    #define POR_PIN                PA8	  //Si funciona XD XD F411CE-Black
   #endif  
 
   #if(STM32_CPU == 767)
-    #define POR_PIN             PA8	  //Si funciona en Nucleo-F767ZI
+    #define POR_PIN                PA8	  //Si funciona en Nucleo-F767ZI
   #endif    
 
 #endif
 #if (SizeFT813==53)
- #define SetSPISpeed   29000000
+ #define SetSPISpeed   		  29000000
 #endif
 #if (SizeFT813==54)
- #define SetSPISpeed   36000000     //32    36
+ #define SetSPISpeed   		  36000000     //32    36
 
   #if(STM32_CPU == 4073)
-    #define POR_PIN             PE1	  //Si funciona XD XD F407VG
+    #define POR_PIN                PE1	  //Si funciona XD XD F407VG
   #endif
 
   #if(STM32_CPU == 411)
-    #define POR_PIN             PA8	  //Si funciona XD XD F411CE-Black
+    #define POR_PIN                PA8	  //Si funciona XD XD F411CE-Black
   #endif  
   
   #if(STM32_CPU == 767)
-    #define POR_PIN             PA8	  //Si funciona en Nucleo-F767ZI
+    #define POR_PIN                PA8	  //Si funciona en Nucleo-F767ZI
   #endif      
 
 #endif
 
 #if (SizeFT813==7)
- #define SetSPISpeed   36000000
+ #define SetSPISpeed   		  36000000
 #endif
 
 #if (SizeFT813==71)
- #define SetSPISpeed   34000000
+ #define SetSPISpeed   		  34000000
 #endif
 
 #if (SizeFT813==100)
- #define SetSPISpeed   36000000
+ #define SetSPISpeed   		  36000000
 #endif
  
 #endif
@@ -1146,22 +1146,6 @@ GD.flush();
 #define PROGMEM
 #endif
 
-#if defined(TEENSYDUINO) && !defined(SPIDRIVER)
-static void __attribute__((__unused__)) teensy_sync()
-{
-  while (1) {
-    delay(1000);
-    //Serial.write("\xa4");
-    for (int i = 0; i < 1000; i++) {
-      if (Serial.available()) {
-        if (Serial.read() == '!') {
-          return;
-        }
-        delay(1);
-      }
-    }
-  }
-}
-#endif
+
 
 #endif
