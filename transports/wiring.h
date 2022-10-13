@@ -104,7 +104,7 @@ delay(100);
 #endif
 
 
-    // So that FT800,801      FT810-3   FT815,6      FT817
+    // So that FT800,801      FT810-3   FT815,6      FT817,8
     // model       0            1         2             3
     switch (__rd16(0x0c0000) >> 8) {
     case 0x00:
