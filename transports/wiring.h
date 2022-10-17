@@ -7,6 +7,12 @@ private:
 public:
   void begin0(int _cs = CS) {
 
+if (SizeFT813==0){   //BT815 MO
+//pinMode(POR_PIN, OUTPUT);
+//digitalWrite(POR_PIN, HIGH);
+//delay(100);
+}
+
 if (SizeFT813==52){   //BT815 MO
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);
