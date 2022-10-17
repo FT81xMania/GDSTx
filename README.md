@@ -21,8 +21,8 @@ Without any interest, we publish this library altruistically."
 EVE3-50G + Teensy 4.1
 
 # STM32F support
-* STM32F103x
-* STM32F407x (BLACK-F407VG, M3-DEMO, M4-DEMO)
+* STM32F103x (F103C8, M3-DEMO)
+* STM32F407x (BLACK-F407VG, M4-DEMO)
 * BLACK STM32F411 
 * STM32F429 (Discovery board)
 * Core7XXI (STM32F746)
