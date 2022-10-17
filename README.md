@@ -19,8 +19,6 @@ Without any interest, we publish this library altruistically."
 * 
 ![FT81xMania](EVE350G.jpg?raw=true "GD23ZUTX")
 
-![FT81xMania](NHD43.jpg?raw=true "GD23ZUTX")
-
 # STM32F support
 * STM32F103x
 * STM32F407x (BLACK, M3-DEMO, M4-DEMO)
