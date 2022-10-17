@@ -110,8 +110,14 @@
 		#define CS 			        10
 		#define SizeFT813           52   //NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 52-5"BT815, MO: 53-5"FT813, 0 Riverdi FT801 4.3", Riverdi: 54-5"  BT817, Riverdi: 100-10"  BT817
 		#define ORIENTACION     	 0   // 0, 1, 2, 3, FT81X/BT81X   0 normal  
-		#define ROTACION        	 0   // 0,1         FT80x
+		#define ROTACION        	 1   // 0,1         FT80x
 		#define SetSPISpeed   36000000   //general
+
+
+#if (SizeFT813==0)
+ #define SetSPISpeed   		  30000000   //30000000
+ //#define POR_PIN                    33
+#endif
 
 	#if (SizeFT813==54)
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
@@ -132,7 +138,7 @@
 
 //*************** User editable line to select EVE TFT size
 #if (SizeFT813==0)
- #define SetSPISpeed   		  28000000   //14000000
+ #define SetSPISpeed   		  16000000   //14000000
 #endif
 #if (SizeFT813==38)
  #define SetSPISpeed   		  30000000

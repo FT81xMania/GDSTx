@@ -572,12 +572,12 @@ void GDClass::tune(void)
  //Serial.print(rd32(REG_HSIZE));  Serial.print("x");   Serial.print(rd32(REG_VSIZE));    Serial.println(" px");	
 	
 	
- uint32_t LOW_FREQ_BOUND = 32040000UL;   //FT801/801
- LOW_FREQ_BOUND = 47040000UL;          //FT81X/BT815/BT816
+ uint32_t LOW_FREQ_BOUND = 32040000UL;  //FT801/801
+ LOW_FREQ_BOUND = 47040000UL;           //FT81X/BT815/BT816
 
 
 if (SizeFT813==0){                    //FT801   XD
-LOW_FREQ_BOUND = 40040000UL;  //
+LOW_FREQ_BOUND = 32040000UL;  //
 }
 
 if (SizeFT813==71){                    //FT813
@@ -609,7 +609,7 @@ LOW_FREQ_BOUND = 47040000UL;  //
 }
 
 if (SizeFT813==52){                    //BT815
-LOW_FREQ_BOUND = 49000000UL;    //funciona  SPI-32000000    mayor frecuencia resulta en inestabilidad de la pantalla al reproducir videos
+LOW_FREQ_BOUND = 55040000UL;    //a mayor frecuencia posible inestabilidad de la pantalla al reproducir videos MO-52; este TFT es demasiado sensible, no conectar GND al conector de audio de 3.5 mm
 }
 
 if (SizeFT813==53){                    //FT813
@@ -681,29 +681,29 @@ void GDClass::begin(int cs) {
   //Serial.println(GDTR.rd32(REG_CMDB_SPACE), HEX);
 //#endif
 
-#if (BOARD == BOARD_FTDI_80x)
-  GDTR.wr(REG_PCLK_POL, 1);
-  GDTR.wr(REG_PCLK, 5);
-#endif
+//#if (BOARD == BOARD_FTDI_80x)
+//  GDTR.wr(REG_PCLK_POL, 1);
+//  GDTR.wr(REG_PCLK, 5);
+//#endif
 
-#if (BOARD == BOARD_SUNFLOWER)
-  GDTR.wr32(REG_HSIZE, 320);
-  GDTR.wr32(REG_VSIZE, 240);
-  GDTR.wr32(REG_HCYCLE, 408);
-  GDTR.wr32(REG_HOFFSET, 70);
-  GDTR.wr32(REG_HSYNC0, 0);
-  GDTR.wr32(REG_HSYNC1, 10);
-  GDTR.wr32(REG_VCYCLE, 263);
-  GDTR.wr32(REG_VOFFSET, 13);
-  GDTR.wr32(REG_VSYNC0, 0);
-  GDTR.wr32(REG_VSYNC1, 2);
-  GDTR.wr32(REG_PCLK, 8);
-  GDTR.wr32(REG_PCLK_POL, 0);
-  GDTR.wr32(REG_CSPREAD, 1);
-  GDTR.wr32(REG_DITHER, 1);
-  GDTR.wr32(REG_ROTATE, 0);
-  GDTR.wr(REG_SWIZZLE, 2);
-#endif
+//#if (BOARD == BOARD_SUNFLOWER)
+//  GDTR.wr32(REG_HSIZE, 320);
+//  GDTR.wr32(REG_VSIZE, 240);
+//  GDTR.wr32(REG_HCYCLE, 408);
+//  GDTR.wr32(REG_HOFFSET, 70);
+// GDTR.wr32(REG_HSYNC0, 0);
+//  GDTR.wr32(REG_HSYNC1, 10);
+//  GDTR.wr32(REG_VCYCLE, 263);
+//  GDTR.wr32(REG_VOFFSET, 13);
+//  GDTR.wr32(REG_VSYNC0, 0);
+//  GDTR.wr32(REG_VSYNC1, 2);
+//  GDTR.wr32(REG_PCLK, 8);
+//  GDTR.wr32(REG_PCLK_POL, 0);
+//  GDTR.wr32(REG_CSPREAD, 1);
+//  GDTR.wr32(REG_DITHER, 1);
+//  GDTR.wr32(REG_ROTATE, 0);
+//  GDTR.wr(REG_SWIZZLE, 2);
+//#endif
 
   GDTR.wr(REG_PWM_DUTY, 0);
   GDTR.wr(REG_GPIO_DIR, 0x83);
@@ -724,11 +724,17 @@ void GDClass::begin(int cs) {
   
  //FT801 XD
  if (SizeFT813==0){
+	 #if 0
+	 
+	 #endif
+
+	GD.wr32(REG_HCYCLE, 548);
+	GD.wr32(REG_VCYCLE, 292);    
     cmd_regwrite(REG_OUTBITS, 0666);
     cmd_regwrite(REG_DITHER, 1);
     cmd_regwrite(REG_ROTATE, ROTACION);
     cmd_regwrite(REG_SWIZZLE, 0); //3 gameduino 23X   0 FT801/FT800
-    cmd_regwrite(REG_PCLK_POL, 1);
+    cmd_regwrite(REG_PCLK_POL, 0);
     cmd_regwrite(REG_PCLK, 5);
  }
  //FT801 XD
@@ -790,11 +796,11 @@ if (SizeFT813==54){
 
     GD.wr32(REG_PCLK, 2);             //2, 1, 0       2:REG_PCLK_FREQ
 	
-	GD.wr32(REG_PCLK_FREQ, 1);        //0   
+	//GD.wr32(REG_PCLK_FREQ, 1);        //0   
 	//GD.wr32(REG_SWIZZLE, 0);          //0 1  3
     
 	GD.wr32(REG_PCLK_POL, 1);         //1, 0    0 to off vertical lines on horizontal gradients    
-	GD.wr32(REG_CSPREAD, 1);          //0
+	GD.wr32(REG_CSPREAD, 0);          //0
 	GD.wr32(REG_DITHER, 1);           //1, 0
 	GD.wr32(REG_OUTBITS, 0x360);      //0x360  0xff0
 		
