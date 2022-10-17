@@ -29,7 +29,7 @@ Without any interest, we publish this library altruistically."
 * For STM32 boards: Donwload and [use the Core STM32GENERIC by danieleff](https://github.com/danieleff/STM32GENERIC)
 * Arduino IDE 1.8.9 for best results
 * Teensyduino 1.57
-* [SdFat library](https://github.com/greiman/SdFat).
+* [SdFat library](https://github.com/greiman/SdFat)
 
 ## For Windows
 1. Unzip library copy and paste path of IDE arduino-1.8.9\libraries\ or Documents\Arduino\libraries\
