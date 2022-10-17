@@ -17,6 +17,8 @@ Without any interest, we publish this library altruistically."
 * Teensy 4
 * Teensy 3.5 and Teensy 3.6
 
+![FT81xMania](NHD43.jpg?raw=true "GD23ZUTX")
+
 # STM32F support
 * STM32F103x
 * STM32F407x (BLACK, M3-DEMO, M4-DEMO)
