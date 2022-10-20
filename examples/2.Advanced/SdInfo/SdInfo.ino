@@ -70,7 +70,7 @@ void setup() {
   
   GD.begin();
      //GD.cmd_loadimage(0, 0);
-     //GD.load("Fondo01.jpg");
+     //GD.load("Fondo010.jpg");
   MP();
 
 }
