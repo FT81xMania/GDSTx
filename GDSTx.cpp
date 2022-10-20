@@ -609,7 +609,7 @@ LOW_FREQ_BOUND = 47040000UL;  //
 }
 
 if (SizeFT813==52){                    //BT815
-LOW_FREQ_BOUND = 55040000UL;    //a mayor frecuencia posible inestabilidad de la pantalla al reproducir videos MO-52; este TFT es demasiado sensible, no conectar GND al conector de audio de 3.5 mm
+LOW_FREQ_BOUND = 59000000UL;    //a mayor frecuencia posible inestabilidad de la pantalla al reproducir videos MO-52; este TFT es demasiado sensible, no conectar GND al conector de audio de 3.5 mm
 }
 
 if (SizeFT813==53){                    //FT813
@@ -709,7 +709,7 @@ void GDClass::begin(int cs) {
   GDTR.wr(REG_GPIO_DIR, 0x83);
   GDTR.wr(REG_GPIO, GDTR.rd(REG_GPIO) | 0x80);
 
-#if (BOARD == BOARD_GAMEDUINO23)
+#if (BOARD == EVE_X)
   Clear(); swap();
 {
   //switch (ft8xx_model) {
@@ -758,6 +758,8 @@ if (SizeFT813==51){
     GD.wr32(REG_PCLK_POL, 0);
     GD.wr32(REG_CSPREAD, 0);      
     GD.wr32(REG_DITHER, 1);       
+
+
 
  //   GD.wr32(REG_HSIZE, 800);
  //   GD.wr32(REG_HCYCLE, 1125);   //990 1000 1056  One Horizontal Line    Th    afecta parpadeo en lineas en gráficas, el valor típico parpadea excesivamente

@@ -39,6 +39,9 @@
 
 #include "Arduino.h"
 
+#define EVE-X                        1
+#define BOARD                    EVE_X  
+
 #define JPGsizeX   					 0
 #define JPGsizeY   					 0
 
@@ -64,7 +67,7 @@
   #endif
 
  #define CS 			   		   PA4
- #define STM32_CPU         		   767//4073                              //767, 4073, 411,  476   //4073   M4DEMO y F407VG-Danieleff y SdFat V2 oficial  F411CE-Black
+ #define STM32_CPU         		   746//4073                              //767, 4073, 411,  746   //4073   M4DEMO y F407VG-Danieleff y SdFat V2 oficial  F411CE-Black
  #define NHDTouch 		   			 0            //1 cargar rutinas panel tactil    0 NHD normal aparentemente no lo requiere?¿
 
  #if(STM32_CPU == 103) 
@@ -91,7 +94,6 @@
   #if(STM32_CPU == 746) 
      #define SD_PIN        		  PA15  //PA15  SPI3 F429 y Core7XXI          no funciona bien revisar variante    
      #define SetSDSpeed             36  
-     //#define POR_INT                PE0   //STM32 PE0
   #endif
   
   #if(STM32_CPU == 767) 
@@ -108,14 +110,14 @@
 #ifdef TEENSYDUINO  	  
  
 		#define CS 			        10
-		#define SizeFT813           52   //NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 52-5"BT815, MO: 53-5"FT813, 0 Riverdi FT801 4.3", Riverdi: 54-5"  BT817, Riverdi: 100-10"  BT817
+		#define SizeFT813           52   // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
 		#define ORIENTACION     	 0   // 0, 1, 2, 3, FT81X/BT81X   0 normal  
 		#define ROTACION        	 1   // 0,1         FT80x
-		#define SetSPISpeed   36000000   //general
+		#define SetSPISpeed   36000000   // general
 
 
 #if (SizeFT813==0)
- #define SetSPISpeed   		  30000000   //30000000
+ #define SetSPISpeed   		  30000000   // 30000000
  //#define POR_PIN                    33
 #endif
 
@@ -124,15 +126,15 @@
 	#endif
  
 	#if (SizeFT813==52)
-		#define SetSPISpeed   32000000   //reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos
-		#define POR_PIN             24	   // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
+		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
+		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
  
 #endif
 
 #if defined(ARDUINO_ARCH_STM32)
 
- #define SizeFT813      	 		43  //35//43//54//5//0//38  //NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 52-5"BT815, MO: 53-5"FT813, 0 Riverdi FT801 4.3", Riverdi: 54-5"  BT817, Riverdi: 100-10"  BT817
+ #define SizeFT813      	 		 5 // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
  #define ORIENTACION     	 		 0  // 0, 1, 2, 3, FT81X/BT81X   0 normal  1-MO38
  #define ROTACION        	 		 0  // 0,1         FT80x
 
@@ -144,7 +146,7 @@
  #define SetSPISpeed   		  30000000
 #endif
 #if (SizeFT813==35)
- #define SetSPISpeed   		  36000000   //36000000   32000000-para F103VET6
+ #define SetSPISpeed   		  36000000   //36000000   
 
  #if(STM32_CPU == 103) 
   #define SetSPISpeed  		  29000000   //para F103VET6
@@ -175,10 +177,16 @@
     #define POR_PIN                PA8	  //Si funciona en Nucleo-F767ZI
   #endif    
 
+  #if(STM32_CPU == 746)
+    #define POR_PIN                PE0	  //Si funciona en Core7XXI
+  #endif    
+
 #endif
+
 #if (SizeFT813==53)
- #define SetSPISpeed   		  29000000
+ #define SetSPISpeed   		  36000000
 #endif
+
 #if (SizeFT813==54)
  #define SetSPISpeed   		  36000000     //32    36
 
@@ -192,6 +200,10 @@
   
   #if(STM32_CPU == 767)
     #define POR_PIN                PA8	  //Si funciona en Nucleo-F767ZI
+  #endif   
+
+  #if(STM32_CPU == 746)
+    #define POR_PIN                PE0	  
   #endif      
 
 #endif
@@ -216,9 +228,6 @@
 #define RGB(r, g, b)    ((uint32_t)((((r) & 0xffL) << 16) | (((g) & 0xffL) << 8) | ((b) & 0xffL)))
 #define F8(x)           (int((x) * 256L))
 #define F16(x)          ((int32_t)((x) * 65536L))
-
-#define BOARD_GAMEDUINO23   1
-#define BOARD               BOARD_GAMEDUINO23
 
 ////////////////////////////////////////////////////////////////////////
 
