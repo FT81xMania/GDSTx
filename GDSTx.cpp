@@ -22,12 +22,10 @@
  */
  //FT81xmania team	
 
-
 #include <Arduino.h>
 #include "SPI.h"
 #include "SdFat.h"
 #include <GDSTx.h>
-
 
 #ifdef TEENSYDUINO 
  #include "EEPROM.h"
@@ -709,7 +707,6 @@ void GDClass::begin(int cs) {
   GDTR.wr(REG_GPIO_DIR, 0x83);
   GDTR.wr(REG_GPIO, GDTR.rd(REG_GPIO) | 0x80);
 
-#if (BOARD == EVE_X)
   Clear(); swap();
 {
   //switch (ft8xx_model) {
@@ -1040,7 +1037,6 @@ if (SizeFT813==5)
   }
 
   }
-#endif
 
   GD.finish();
   w = GDTR.rd16(REG_HSIZE);

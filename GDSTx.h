@@ -33,26 +33,43 @@
 
 #include "SPI.h"
 #include "SdFat.h"
-
-//#include "wiring.h"
-//#include "transports/wiring.h"
-
 #include "Arduino.h"
 
-#define EVE-X                        1
-#define BOARD                    EVE_X  
-
-#define JPGsizeX   					 0
-#define JPGsizeY   					 0
-
-#define  H743    					 0
-#define POR_PIN  					 0
+#define JPGsizeX   					 0        //under test
+#define JPGsizeY   					 0        //under test
+#define  H743    					 0        //under test
+#define POR_PIN  					 0        //under test 
 
 #if defined(ARDUINO_TEENSY32)
-  #define SD_PIN 			 		 5
+  #define SD_PIN 			 		 5        //under test
 #endif
 
-#if defined(ARDUINO_ARCH_STM32)
+#ifdef TEENSYDUINO                  //*******************************************************Teensy 4x/3x boards setup: CS-TFT, Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
+ 
+		#define CS 			        10
+		#define SizeFT813           52   // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
+		#define ORIENTACION     	 0   // 0, 1, 2, 3, FT81X/BT81X   0 normal  
+		#define ROTACION        	 1   // 0,1         FT80x
+		#define SetSPISpeed   36000000   // general
+
+
+#if (SizeFT813==0)
+ #define SetSPISpeed   		  30000000   // 30000000 --- specific FT801/FT800
+ //#define POR_PIN                    33
+#endif
+
+	#if (SizeFT813==54)
+		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
+	#endif
+ 
+	#if (SizeFT813==52)
+		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
+		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
+	#endif
+ 
+#endif                              //*******************************************************Teensy 4x/3x boards setup: CS-TFT, Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
+
+#if defined(ARDUINO_ARCH_STM32)     //*******************************************************STM32 boards setup: EEPROM source, CS-TFT, MCU, SD_PIN, SDSpeed
 
   #include <AT24Cxx.h>
   #define EEPROM_SOURCE      		 0    //1-Usar para MO_38     0-para los demás
@@ -88,7 +105,6 @@
  #if(STM32_CPU == 4073) 
     #define SD_PIN          	  PB12  //PB12 SPI2-F407VG            funciona sin problemas  M4DEMO
     #define SetSDSpeed              48
-    //#define POR_PIN         		  PE1	  //Si funciona XD XD
   #endif  
 
   #if(STM32_CPU == 746) 
@@ -104,35 +120,10 @@
      #define SetSDSpeed      	    36  
   #endif  
 
-#endif
+#endif                              //*******************************************************STM32 boards setup: EEPROM source, CS-TFT, MCU, SD_PIN, SDSpeed
 
 
-#ifdef TEENSYDUINO  	  
- 
-		#define CS 			        10
-		#define SizeFT813           52   // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
-		#define ORIENTACION     	 0   // 0, 1, 2, 3, FT81X/BT81X   0 normal  
-		#define ROTACION        	 1   // 0,1         FT80x
-		#define SetSPISpeed   36000000   // general
-
-
-#if (SizeFT813==0)
- #define SetSPISpeed   		  30000000   // 30000000
- //#define POR_PIN                    33
-#endif
-
-	#if (SizeFT813==54)
-		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
-	#endif
- 
-	#if (SizeFT813==52)
-		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
-		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
-	#endif
- 
-#endif
-
-#if defined(ARDUINO_ARCH_STM32)
+#if defined(ARDUINO_ARCH_STM32)     //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
 
  #define SizeFT813      	 		 5 // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
  #define ORIENTACION     	 		 0  // 0, 1, 2, 3, FT81X/BT81X   0 normal  1-MO38
@@ -220,7 +211,7 @@
  #define SetSPISpeed   		  36000000
 #endif
  
-#endif
+#endif                              //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
 
 
 //FT81xmania team
