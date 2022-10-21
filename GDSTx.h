@@ -13,7 +13,6 @@
  * NHD FT813@7"
  * Support for SdFat Beta (Greimann)                               							-- 12 April 2021
  * Add timmings for Riverdi BT817@5"                               							-- 01 Sept  2021
- * Add logo on the touching calibration and the error test         							-- 18 Nov   2021 
  * Add STM32 boards support (for F411CE and F407VG, STM32-Danielef Core) 					-- 13 April 2022 
  * Add BT817 for STM32 and teensy 4.1                              							-- 25 June  2022
  * Asset loading fix and renaming library to GDSTx, fixes for VET6, M3DEMO and M4DEMO		-- 31 Aug   2022
@@ -84,7 +83,7 @@
   #endif
 
  #define CS 			   		   PA4
- #define STM32_CPU         		   746//4073                              //767, 4073, 411,  746   //4073   M4DEMO y F407VG-Danieleff y SdFat V2 oficial  F411CE-Black
+ #define STM32_CPU         		  4073                              //767, 4073, 411,  746   //4073   M4DEMO y F407VG-Danieleff y SdFat V2 oficial  F411CE-Black
  #define NHDTouch 		   			 0            //1 cargar rutinas panel tactil    0 NHD normal aparentemente no lo requiere?¿
 
  #if(STM32_CPU == 103) 
@@ -125,7 +124,7 @@
 
 #if defined(ARDUINO_ARCH_STM32)     //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
 
- #define SizeFT813      	 		 5 // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
+ #define SizeFT813      	 		 35 // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
  #define ORIENTACION     	 		 0  // 0, 1, 2, 3, FT81X/BT81X   0 normal  1-MO38
  #define ROTACION        	 		 0  // 0,1         FT80x
 

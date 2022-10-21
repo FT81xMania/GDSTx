@@ -13,7 +13,6 @@
  * NHD FT813@7"
  * Support for SdFat Beta (Greimann)                               							-- 12 April 2021
  * Add timmings for Riverdi BT817@5"                               							-- 01 Sept  2021
- * Add logo on the touching calibration and the error test         							-- 18 Nov   2021 
  * Add STM32 boards support (for F411CE and F407VG, STM32-Danielef Core) 					-- 13 April 2022 
  * Add BT817 for STM32 and teensy 4.1                              							-- 25 June  2022
  * Asset loading fix and renaming library to GDSTx, fixes for VET6, M3DEMO and M4DEMO		-- 31 Aug   2022
@@ -78,18 +77,9 @@
 
 //FT81xmania team
 
-#ifdef DUMPDEV
-#include <assert.h>
-#include "transports/dump.h"
-#endif
-
 byte ft8xx_model;
 uint16_t BT8XX; // 0x00:FT800/0x10:FT810/0x11:FT811/0x12:FT812/0x13:FT813/0x15:BT815/0x16:BT816/0x17:BT817
 #include "transports/wiring.h"
-
-#if defined(SPIDRIVER)
-#include "transports/tr-spidriver.h"
-#endif
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -530,9 +520,6 @@ void GDClass::swap(void) {
   cmd_loadidentity();
   cmd_dlstart();
   GDTR.flush();
-#ifdef DUMPDEV
-  GDTR.swap();
-#endif
 }
 
 uint32_t GDClass::measure_freq(void)
@@ -569,10 +556,8 @@ void GDClass::tune(void)
  //Serial.print("SPI-1 speed (MHz): ");   Serial.println(SetSPISpeed/1000000);
  //Serial.print(rd32(REG_HSIZE));  Serial.print("x");   Serial.print(rd32(REG_VSIZE));    Serial.println(" px");	
 	
-	
  uint32_t LOW_FREQ_BOUND = 32040000UL;  //FT801/801
  LOW_FREQ_BOUND = 47040000UL;           //FT81X/BT815/BT816
-
 
 if (SizeFT813==0){                    //FT801   XD
 LOW_FREQ_BOUND = 32040000UL;  //
@@ -624,9 +609,6 @@ LOW_FREQ_BOUND = 60000000UL;  //  59000000UL   óptimo
  
  //Serial.println("****");
  
-
- 
- 
   uint32_t f;
   for (byte i = 0; (i < 31) && ((f = measure_freq()) < LOW_FREQ_BOUND); i++) {
     GDTR.wr(REG_TRIM, i);
@@ -660,13 +642,8 @@ void GDClass::begin(int cs) {
   finish();
 
 //#if 0
-
   //Serial.print("cs: ");
   //Serial.println(cs, DEC);
-
-  //Serial.print("BOARD ");
-  //Serial.println(BOARD, DEC);
-
   //Serial.print("model: ");
   //Serial.println(ft8xx_model, HEX);
   //Serial.print("ID REGISTER: ");
@@ -677,30 +654,6 @@ void GDClass::begin(int cs) {
   //Serial.println(GDTR.rd32(REG_CMD_WRITE), HEX);
   //Serial.print("CMDB SPACE:");
   //Serial.println(GDTR.rd32(REG_CMDB_SPACE), HEX);
-//#endif
-
-//#if (BOARD == BOARD_FTDI_80x)
-//  GDTR.wr(REG_PCLK_POL, 1);
-//  GDTR.wr(REG_PCLK, 5);
-//#endif
-
-//#if (BOARD == BOARD_SUNFLOWER)
-//  GDTR.wr32(REG_HSIZE, 320);
-//  GDTR.wr32(REG_VSIZE, 240);
-//  GDTR.wr32(REG_HCYCLE, 408);
-//  GDTR.wr32(REG_HOFFSET, 70);
-// GDTR.wr32(REG_HSYNC0, 0);
-//  GDTR.wr32(REG_HSYNC1, 10);
-//  GDTR.wr32(REG_VCYCLE, 263);
-//  GDTR.wr32(REG_VOFFSET, 13);
-//  GDTR.wr32(REG_VSYNC0, 0);
-//  GDTR.wr32(REG_VSYNC1, 2);
-//  GDTR.wr32(REG_PCLK, 8);
-//  GDTR.wr32(REG_PCLK_POL, 0);
-//  GDTR.wr32(REG_CSPREAD, 1);
-//  GDTR.wr32(REG_DITHER, 1);
-//  GDTR.wr32(REG_ROTATE, 0);
-//  GDTR.wr(REG_SWIZZLE, 2);
 //#endif
 
   GDTR.wr(REG_PWM_DUTY, 0);
@@ -722,8 +675,7 @@ void GDClass::begin(int cs) {
  //FT801 XD
  if (SizeFT813==0){
 	 #if 0
-	 
-	 #endif
+     #endif
 
 	GD.wr32(REG_HCYCLE, 548);
 	GD.wr32(REG_VCYCLE, 292);    
@@ -735,7 +687,6 @@ void GDClass::begin(int cs) {
     cmd_regwrite(REG_PCLK, 5);
  }
  //FT801 XD
-
 
 //TFT Riverdi 5"
 if (SizeFT813==51){
@@ -755,25 +706,6 @@ if (SizeFT813==51){
     GD.wr32(REG_PCLK_POL, 0);
     GD.wr32(REG_CSPREAD, 0);      
     GD.wr32(REG_DITHER, 1);       
-
-
-
- //   GD.wr32(REG_HSIZE, 800);
- //   GD.wr32(REG_HCYCLE, 1125);   //990 1000 1056  One Horizontal Line    Th    afecta parpadeo en lineas en gráficas, el valor típico parpadea excesivamente
- //	  GD.wr32(REG_HSYNC1, 48);    //10    HS pulse width         Thpw   usar el típico del datasheet
- //   GD.wr32(REG_HOFFSET, 23+46);   //46    HS Blanking         Thb    controla desplazamiento a la derecha       -->restas acá
- //   GD.wr32(REG_HSYNC0, 23);    //0     HS front porch         Thfp   controla desplazamiento a la izquierda  lo que agregues aqui-->
-
- //   GD.wr32(REG_VSIZE, 480);
- //   GD.wr32(REG_VCYCLE, 650);   //525 VS period time   Tv        usar el típico del datasheet
- //	  GD.wr32(REG_VSYNC1, 3);     //10  VS pulse width   Tvpw      usar el típico del datasheet      
- //   GD.wr32(REG_VOFFSET, 13+23);   //23  VS Blanking      Tvb    controla desplazamiento vertical hacia abajo    -->restas acá 
- //   GD.wr32(REG_VSYNC0, 13);    //0   VS front porch   Tvfp      controla desplazamiento vertical hacia arriba      lo que agregues aquí-->
-
- //   GD.wr32(REG_PCLK, 2);
- //   GD.wr32(REG_PCLK_POL, 0);
- //   GD.wr32(REG_CSPREAD, 0);      
- //   GD.wr32(REG_DITHER, 1);       
 }
 //TFT Riverdi 5"
 
@@ -836,7 +768,6 @@ if (SizeFT813==100){
 }
 //TFT Riverdi 10"   EVE4
 
-
 //TFT MO BT815 5"
 
 if (SizeFT813==52){
@@ -885,7 +816,6 @@ if (SizeFT813==53){
     GD.wr32(REG_CSPREAD, 0);
     GD.wr32(REG_DITHER, 1);
     //GD.wr16(REG_TOUCH_CONFIG, 0x05D1);
-
 }
 //TFT MO FT813 5"
 
@@ -1009,8 +939,6 @@ if (SizeFT813==38)
 	GD.wr32(REG_CSPREAD, 1);    //1
 	GD.wr32(REG_DITHER, 1);     //1 
 	//GD.wr(REG_ROTATE, 0);
-
-
   }
 
 
@@ -1074,7 +1002,6 @@ if (SizeFT813==5)
     }
 #endif
 
-
 #if defined(ARDUINO_ARCH_STM32)
  if (NHDTouch==1)
  {
@@ -1123,7 +1050,7 @@ if (SizeFT813==5)
      Clear();	   
 	 cmd_text(w / 2, (h / 2)-32, 30, OPT_CENTER, "EVE-1/2/3 on line");
 	 cmd_text(w / 2, h / 2, 30, OPT_CENTER, "FT81XMania.com");
-     //cmd_spinner(w / 2, (h / 2)+ 0.1*h, 1, 0);
+     //cmd_spinner(w / 2, (h / 2)+ 0.1*h, 1, 0);  //falla en BT817
 	 swap();
    }
     
@@ -1318,7 +1245,7 @@ void GDClass::cs(const char *s) {
   align(count + 1);
 }
 
-#if !defined(ESP8266) && !defined(ESP32) && !defined(TEENSYDUINO)
+#if !defined(TEENSYDUINO)
 void GDClass::copy(const uint8_t *src, int count) {
 #else
 void GDClass::copy(const uint8_t *src, int count) {
@@ -1778,12 +1705,12 @@ if (Presc==7){
 #ifdef TEENSYDUINO
 void GDClass::printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options)
 {
-   char floatNumber[50];
+   char doubleNumber[50];
    char bufNum[25];
    
    dtostrf(f, 3, Presc, bufNum);
-   sprintf(floatNumber,"%s", bufNum);
-   cmd_text(x, y, font, options, floatNumber);
+   sprintf(doubleNumber,"%s", bufNum);
+   cmd_text(x, y, font, options, doubleNumber);
    //cmd_text(x, y, font, 0, floatNumber);
    //cmd_text(x, y, font, OPT_RIGHTX, floatNumber);
    //cmd_text(x, y, font, OPT_CENTER, floatNumber);
@@ -1791,7 +1718,6 @@ void GDClass::printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte fo
 #endif
 
 void GDClass::Rect_Empty(int16_t xi, int16_t yi,int16_t xPX, int16_t yPX, int16_t RF, int16_t GF, int16_t BF)
-//void GDClass::Rect_Empty(int16_t xi, int16_t yi,int16_t xPX, int16_t yPX)
 {
   GD.SaveContext();
   GD.ColorRGB(RF, GF, BF);     //color de relleno
@@ -2110,49 +2036,12 @@ void GDClass::finish(void) {
 void GDClass::get_inputs(void) {
   GDTR.finish();
   byte *bi = (byte*)&inputs;
-#if defined(DUMPDEV)
-  extern FILE* stimfile;
-  if (stimfile) {
-    byte tag;
-    fscanf(stimfile, "%hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx %hhx",
-        &bi[0],
-        &bi[1],
-        &bi[2],
-        &bi[3],
-        &bi[4],
-        &bi[5],
-        &bi[6],
-        &bi[7],
-        &bi[8],
-        &bi[9],
-        &bi[10],
-        &bi[11],
-        &bi[12],
-        &bi[13],
-        &bi[14],
-        &bi[15],
-        &bi[16],
-        &bi[17]);
-    GDTR.wr(REG_TAG, tag);
-  } else {
     inputs.x = inputs.y = -32768;
-  }
-#else
   GDTR.rd_n(bi, REG_TRACKER, 4);
   GDTR.rd_n(bi + 4, REG_TOUCH_RZ, 13);
   GDTR.rd_n(bi + 17, REG_TAG, 1);
   inputs.touching = (inputs.x != -32768);
   inputs.xytouch.set(PIXELS(inputs.x), PIXELS(inputs.y));
-
-
-#ifdef DUMP_INPUTS
-  for (size_t i = 0; i < sizeof(inputs); i++) {
-
-
-  }
-
-#endif
-#endif
 }
 void GDClass::bulkrd(uint32_t a) {
   GDTR.bulk(a);
@@ -2161,9 +2050,7 @@ void GDClass::resume(void) {
   GDTR.resume();
 }
 void GDClass::__end(void) {
-#if !defined(DUMPDEV) && !defined(RASPBERRY_PI)
   GDTR.__end();
-#endif
 }
 void GDClass::play(uint8_t instrument, uint8_t note) {
   wr16(REG_SOUND, (note << 8) | instrument);
