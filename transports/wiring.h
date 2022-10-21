@@ -7,12 +7,6 @@ private:
 public:
   void begin0(int _cs = CS) {
 
-if (SizeFT813==0){   //BT815 MO
-//pinMode(POR_PIN, OUTPUT);
-//digitalWrite(POR_PIN, HIGH);
-//delay(100);
-}
-
 if (SizeFT813==52){   //BT815 MO
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);
@@ -144,13 +138,7 @@ delay(100);
     }
     wp += 4;
     freespace -= 4;
-#if defined(ESP8266)
-    // SPI.writeBytes((uint8_t*)&x, 4);
-    SPI.write32(x, 0);
-#elif defined(ESP32)
-    // SPI.write32(x) has the wrong byte order.
-    SPI.writeBytes((uint8_t*)&x, 4);
-#else
+
     union {
       uint32_t c;
       uint8_t b[4];
@@ -160,8 +148,8 @@ delay(100);
     SPI.transfer(b[1]);
     SPI.transfer(b[2]);
     SPI.transfer(b[3]);
-#endif
   }
+  
   void cmdbyte(byte x) {
     if (freespace == 0) {
       getfree(1);
@@ -170,6 +158,7 @@ delay(100);
     freespace--;
     SPI.transfer(x);
   }
+  
   void cmd_n(byte *s, uint16_t n) {
     if (freespace < n) {
       getfree(n);
@@ -294,8 +283,6 @@ delay(100);
       *dst++ = SPI.transfer(0);
     stream();
   }
-
-
 
 //FT81xmania Team
 void wr_n(uint32_t addr, byte *src, uint16_t n)
