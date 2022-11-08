@@ -17,7 +17,7 @@ Without any interest, we publish this library altruistically."
 * Teensy 4
 * Teensy 3.5 and Teensy 3.6
 
-![FT81xMania](EVE350G.jpg?raw=true "GD23ZUTX")
+![FT81xMania](NHD43.jpg?raw=true "GD23ZUTX")
 EVE3-50G + Teensy 4.1
 
 # STM32F support
