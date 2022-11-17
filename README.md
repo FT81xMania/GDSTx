@@ -56,11 +56,12 @@ NHD 5" FT813 + Teensy 4.1
 * [FT81x High resolution](http://brtchip.com/wp-content/uploads/Support/Documentation/Datasheets/ICs/EVE/DS_FT81x.pdf), This a PDF documentation for FT81x screens programming guide.
 
 # Useful links
-* Repository by [Amthony Di Girolamo](https://github.com/AnthonyDiGirolamo/gd2-lib-sdfat-testing)
-* Core for STM32GENERIC by [Danieleff](https://github.com/danieleff/STM32GENERIC), installation for IDE Arduino with STM32 boards
 * Library GD2 by [James Bowman](https://github.com/jamesbowman/gd2-lib)
+* Core for STM32GENERIC by [Danieleff](https://github.com/danieleff/STM32GENERIC), installation for IDE Arduino with STM32 boards
+* Repository by [Amthony Di Girolamo](https://github.com/AnthonyDiGirolamo/gd2-lib-sdfat-testing)
 
 # Acknowledgments
+- James Bowman for your support and constant teachings and great programming effort
 - Infinite thanks to **@nopnop2002** [STM32_GD2 Library on GitHub](https://github.com/nopnop2002/STM32_GD2)
 - Hat tip to anyone who's code was used
 - Inspiration
@@ -70,4 +71,3 @@ NHD 5" FT813 + Teensy 4.1
 
 # Test video file
 http://www.mediafire.com/file/1fo25jc3605hmm9/oficial.avi/file
-
