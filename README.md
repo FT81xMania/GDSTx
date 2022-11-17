@@ -71,3 +71,13 @@ NHD 5" FT813 + Teensy 4.1
 
 # Test video file
 http://www.mediafire.com/file/1fo25jc3605hmm9/oficial.avi/file
+
+#include <GDSTx.h>
+void setup(){
+  GD.begin();
+}
+void loop(){
+  MoviePlayer mp;
+  mp.begin("oficial.avi");
+  mp.play();
+}
