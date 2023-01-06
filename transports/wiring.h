@@ -7,31 +7,37 @@ private:
 public:
   void begin0(int _cs = CS) {
 
-if (SizeFT813==52){   //BT815 MO
+//if (SizeEVE==0){   //
+//pinMode(POR_PIN, OUTPUT);
+//digitalWrite(POR_PIN, HIGH);
+//delay(100);
+//}
+
+if (SizeEVE==52){   //BT815 MO
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);
 delay(100);
 }
 
-if (SizeFT813==53){   //FT813 MO
+if (SizeEVE==53){   //FT813 MO
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
 delay(100);
 }
 
-if (SizeFT813==38){   //FT813 MO
+if (SizeEVE==38){   //FT813 MO
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
 delay(100);
 }
 
-if (SizeFT813==54){   //BT817
+if (SizeEVE==54){   //BT817
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
 delay(100);
 }
 
-if (SizeFT813==100){   //BT817
+if (SizeEVE==100){   //BT817
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
 delay(100);
@@ -165,8 +171,8 @@ delay(100);
     }
     wp += n;
     freespace -= n;
-//#if defined(ARDUINO_ARCH_STM32)
-//    SPI.write(s, n);
+//#if defined(ARDUINO_ARCH_STM32)   //under test
+//    SPI.write(s, n);              //under test
 //#else
     while (n > 8) {
       n -= 8;
@@ -191,7 +197,7 @@ delay(100);
   
   void coprocsssor_recovery(void) {
     __end();
-    if (ft8xx_model >= 2)
+    if (ft8xx_model >= 3)
       for (byte i = 0; i < 128; i += 2)
         __wr16(i, __rd16(0x309800UL + i));
 
