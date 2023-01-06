@@ -2,22 +2,35 @@
  * Gameduino 2/3 library for Arduino, Arduino Due, Raspberry Pi,
  * Teensy 3.x/4.0, ESP8266 and ESP32.
  * https://github.com/jamesbowman/gd2-lib
- *  
+ *
+ * In memory of mi brother Thomas (lighcalamar). THX bro for your teachings
  * Modified by TFTLCDCyg to Teensy 4/4.1 SDIO system               							-- 09 March 2021
- * Riverdi FT801@4.3"
- * Riverdi FT813@5"
- * Riverdi FT813@7"
- * NHD FT813@3.5"
- * NHD FT813@4.3"
- * NHD FT813@5"
- * NHD FT813@7"
- * Support for SdFat Beta (Greimann)                               							-- 12 April 2021
- * Add timmings for Riverdi BT817@5"                               							-- 01 Sept  2021
- * Add STM32 boards support (for F411CE and F407VG, STM32-Danielef Core) 					-- 13 April 2022 
+ * Riverdi FT801@4.3"                                                                    0
+ * Riverdi FT813@5"                                                                     51
+ * Riverdi FT813@7"                                                                     71
+ * NHD FT813@3.5"                                                                       35
+ * NHD FT813@4.3"                                                                       43
+ * NHD FT813@5"                                                                          5
+ * NHD FT813@7"                                                                          7
+ * Support for SdFat V2 (Greimann)                               							-- 12 April 2021
+ * source: https://github.com/greiman/SdFat
+ * Add timmings for Riverdi BT817@5"                               					    54	-- 01 Sept  2021
+ * source: https://riverdi.com/download/RVT50HQBNWC00-B/DS_RVT50HQBNWC00-B_Rev.1.4.pdf                  p-13
+ * Add STM32 boards support (for F411CE and F407VG, STM32-Danieleff Core) 		      4073 	-- 13 April 2022
+ * source: https://github.com/danieleff/STM32GENERIC
  * Add BT817 for STM32 and teensy 4.1                              							-- 25 June  2022
  * Asset loading fix and renaming library to GDSTx, fixes for VET6, M3DEMO and M4DEMO		-- 31 Aug   2022
- * Add STM32 boards (support for Core7XXI and Nucleo-F767ZI, STM32-Danielef Core)			-- 31 Aug   2022
- * Add Matrix Orbital EVE3 BT815@5"															-- 03 Oct   2022
+ * Add STM32 boards (support for Core7XXI and Nucleo-F767ZI, STM32-Danieleff Core)  746,767	-- 31 Aug   2022
+ * Add Matrix Orbital EVE3 BT815@5"		                                                52 	-- 03 Oct   2022
+ * Add config.h; entry SizeFT813 renamed to SizeEVE   FT800/FT801-respond                   -- 28 Oct   2022
+ * Add support for Core7XXI-F746IG (STM32 Core official 1.9.0, Nucleo F746ZG)         7460  -- 05 Nov   2022 
+ * Add support for Nucleo H743ZI and Nucleo F767ZI (STM32 Core official 1.9.0)        7670  -- 05 Nov   2022
+ * json path: https://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json
+ * Correction of the timing tables for the NHD TFT-EVE 2                                    -- 07 Nov   2022
+ * source: https://github.com/NewhavenDisplay/EVE2-TFT-Gamduino2-Library/blob/main/NHD-Gameduino2-AppNotes.pdf
+ * Test for Gameduino3-shield on STM32                                                      -- 09 Dec   2022
+ * Rename SizeFT813 to SizeEVE and add config.h file                                        -- 06 Jan   2023
+ * Update to version 2.01                                                                   -- 06 Jan   2023
  */
  //FT81xmania team	
 
@@ -28,21 +41,24 @@
 
 #ifdef TEENSYDUINO 
  #include "EEPROM.h"
+  #if defined(ARDUINO_TEENSY32)
+   #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(36))
+  #endif 
+ 
  SdFs SD;
 #endif
 
 #if defined(ARDUINO_ARCH_STM32)
 
-  #if(STM32_CPU == 103)
+ #if(STM32_CPU == 103)
 //                             MOSI  MISO  SCK
-   static SPIClass SPI_2(SPI2, PB15, PB14, PB13);
+   static SPIClass SPI_2(SPI2, PB15, PB14, PB13);    //F103C8
    #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_2)
-  #endif  
-
+ #endif  
 
  #if(STM32_CPU == 411)
 //                             MOSI  MISO  SCK
-   extern SPIClass SPI_2(SPI2, PB15, PB14, PB13);   //M3DEMO, F411CE
+   extern SPIClass SPI_2(SPI2, PB15, PB14, PB13);   //F411CE
    #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_2)
  #endif  
 
@@ -51,7 +67,6 @@
    static SPIClass SPI_2(PB15, PB14, PB13);
    #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_2)
  #endif
-
 
  #if(STM32_CPU == 4073)
 //                             MOSI  MISO  SCK
@@ -66,10 +81,24 @@
  #endif
 
 
-  #if(STM32_CPU == 767)
+ #if(STM32_CPU == 7460)
+//                            MOSI  MISO  SCK
+   extern SPIClass SPI_3(PB2, PB4, PB3);
+   #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_3)
+ #endif
+
+ #if(STM32_CPU == 767)
 //                            MOSI  MISO SCK
    extern SPIClass SPI_3(SPI3, PB2, PB4, PB3);
    #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_3)
+ #endif
+
+
+  #if(STM32_CPU == 7670)
+   //SdFat beta 2  on Official core STM32
+   static SPIClass SPI_3(PB2, PB4, PB3);
+   #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_3)
+   //#define SD_CONFIG SdSpiConfig(SD_PIN, ENABLE_DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_3)
   #endif
 
  SdFs SD;  //type 3
@@ -503,8 +532,8 @@ public:
 };
 
 //RndMnkIII, FT81xmania Team
-const uint16_t GDClass::TAM_BUFFER_SD=8192;  //8192  2048
-const uint16_t GDClass::TAM_BUFFER_FT=2048;   //2048   512
+const uint16_t GDClass::TAM_BUFFER_SD=8192;  //8192
+const uint16_t GDClass::TAM_BUFFER_FT=2048;  //2048  
 byte GDClass::buf[TAM_BUFFER_SD];
 byte GDClass::FTbuf[TAM_BUFFER_FT];
 //RndMnkIII, FT81xmania Team
@@ -551,60 +580,61 @@ void GDClass::tune(void)
  {
   //Serial.print("BT8");  Serial.println(BT8XX, HEX); 
  } 
- //Serial.print("TFT id: ");  Serial.println(SizeFT813);  Serial.print("SPI-1 speed: ");   Serial.println(SetSPISpeed);
- //Serial.print("TFT id: ");  Serial.println(SizeFT813);  
+ //Serial.print("TFT id: ");  Serial.println(SizeEVE);  Serial.print("SPI-1 speed: ");   Serial.println(SetSPISpeed);
+ //Serial.print("TFT id: ");  Serial.println(SizeEVE);  
  //Serial.print("SPI-1 speed (MHz): ");   Serial.println(SetSPISpeed/1000000);
  //Serial.print(rd32(REG_HSIZE));  Serial.print("x");   Serial.print(rd32(REG_VSIZE));    Serial.println(" px");	
 	
  uint32_t LOW_FREQ_BOUND = 32040000UL;  //FT801/801
  LOW_FREQ_BOUND = 47040000UL;           //FT81X/BT815/BT816
 
-if (SizeFT813==0){                    //FT801   XD
-LOW_FREQ_BOUND = 32040000UL;  //
+if (SizeEVE==0){                    //FT801   XD
+LOW_FREQ_BOUND =  32040000UL;  //
 }
 
-if (SizeFT813==71){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==71){                   //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
 }
 
-if (SizeFT813==5){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==5){                    //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
+//LOW_FREQ_BOUND =    55000000UL;  //
 }
 
-if (SizeFT813==7){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==7){                    //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
 }
 
-if (SizeFT813==38){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==38){                   //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
 }
 
-if (SizeFT813==35){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==35){                   //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
 }
 
-if (SizeFT813==43){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==43){                   //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
 }
 
-if (SizeFT813==51){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==51){                   //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
 }
 
-if (SizeFT813==52){                    //BT815
-LOW_FREQ_BOUND = 59000000UL;    //a mayor frecuencia posible inestabilidad de la pantalla al reproducir videos MO-52; este TFT es demasiado sensible, no conectar GND al conector de audio de 3.5 mm
+if (SizeEVE==52){                   //BT815
+LOW_FREQ_BOUND =  59000000UL;    //a mayor frecuencia posible inestabilidad de la pantalla al reproducir videos MO-52; este TFT es demasiado sensible, no conectar GND al conector de audio de 3.5 mm
 }
 
-if (SizeFT813==53){                    //FT813
-LOW_FREQ_BOUND = 47040000UL;  //
+if (SizeEVE==53){                   //FT813
+LOW_FREQ_BOUND =  47040000UL;  //
 }
 
-if (SizeFT813==54){                    //BT817/BT818
-LOW_FREQ_BOUND = 60000000UL;  // 59000000UL   óptimo
+if (SizeEVE==54){                   //BT817/BT818
+LOW_FREQ_BOUND =  60000000UL;  // 59000000UL   óptimo
 }
 
-if (SizeFT813==100){                    //BT817/BT818
-LOW_FREQ_BOUND = 60000000UL;  //  59000000UL   óptimo
+if (SizeEVE==100){                  //BT817/BT818
+LOW_FREQ_BOUND =  60000000UL;  //  59000000UL   óptimo
 }
  
  //Serial.println("****");
@@ -630,9 +660,13 @@ void GDClass::begin(int cs) {
 	SD.begin(SD_CONFIG);
   #endif	
 
-  #ifdef TEENSYDUINO  	  
-    SD.begin(SdioConfig(FIFO_SDIO));
-  #endif
+#ifdef TEENSYDUINO  	  
+ #if defined(ARDUINO_TEENSY32)
+   //SD.begin(SD_CONFIG);
+ #else    
+	SD.begin(SdioConfig(FIFO_SDIO));
+ #endif
+#endif
   
   //begin1:
   GDTR.begin1();
@@ -673,295 +707,360 @@ void GDClass::begin(int cs) {
   
   
  //FT801 XD
- if (SizeFT813==0){
+ if (SizeEVE==0)
+ {
 	 #if 0
      #endif
 
-	GD.wr32(REG_HCYCLE, 548);
-	GD.wr32(REG_VCYCLE, 292);    
+//Gameduino3 shield
+if (GameduinoX==1){
+	GD.wr32(REG_HCYCLE,        548);
+	GD.wr32(REG_VCYCLE,        292);    
     cmd_regwrite(REG_OUTBITS, 0666);
-    cmd_regwrite(REG_DITHER, 1);
-    cmd_regwrite(REG_ROTATE, ROTACION);
-    cmd_regwrite(REG_SWIZZLE, 0); //3 gameduino 23X   0 FT801/FT800
-    cmd_regwrite(REG_PCLK_POL, 0);
-    cmd_regwrite(REG_PCLK, 5);
+    cmd_regwrite(REG_DITHER,     1);
+    cmd_regwrite(REG_ROTATE,     ROTACION);
+    cmd_regwrite(REG_SWIZZLE,    3); //3 gameduino 23X   0 FT801/FT800/FT81x
+    cmd_regwrite(REG_PCLK_POL,   1); //1 gameduino 23X   0 FT801/FT800/FT81x
+    cmd_regwrite(REG_PCLK,       5);
+   }
+
+//NHD43 and FT843
+if (GameduinoX==0){
+	GD.wr32(REG_HCYCLE,        548);
+	GD.wr32(REG_VCYCLE,        292);    
+    cmd_regwrite(REG_OUTBITS, 0666);
+    cmd_regwrite(REG_DITHER,     1);
+    cmd_regwrite(REG_ROTATE,     ROTACION);
+    cmd_regwrite(REG_SWIZZLE,    0);
+    cmd_regwrite(REG_PCLK_POL,   0);
+    cmd_regwrite(REG_PCLK,       5);	
+   }
+	
  }
  //FT801 XD
 
 //TFT Riverdi 5"
-if (SizeFT813==51){
+if (SizeEVE==51){
 	cmd_setrotate(ORIENTACION);
     GD.wr32(REG_HCYCLE, 1056);    
-    GD.wr32(REG_HOFFSET, 46);     
-    GD.wr32(REG_HSIZE, 800);
-    GD.wr32(REG_HSYNC0, 0);
-    GD.wr32(REG_HSYNC1, 10);      
-    GD.wr32(REG_VCYCLE, 525);     
-    GD.wr32(REG_VOFFSET, 23);     
-    GD.wr32(REG_VSIZE, 480);
-    GD.wr32(REG_VSYNC0, 0);
-    GD.wr32(REG_VSYNC1, 10);
+    GD.wr32(REG_HOFFSET,  46);     
+    GD.wr32(REG_HSIZE,   800);
+    GD.wr32(REG_HSYNC0,    0);
+    GD.wr32(REG_HSYNC1,   10);      
+    GD.wr32(REG_VCYCLE,  525);     
+    GD.wr32(REG_VOFFSET,  23);     
+    GD.wr32(REG_VSIZE,   480);
+    GD.wr32(REG_VSYNC0,    0);
+    GD.wr32(REG_VSYNC1,   10);
 
-    GD.wr32(REG_PCLK, 2);
-    GD.wr32(REG_PCLK_POL, 0);
-    GD.wr32(REG_CSPREAD, 0);      
-    GD.wr32(REG_DITHER, 1);       
+    GD.wr32(REG_PCLK,      2);
+    GD.wr32(REG_PCLK_POL,  0);
+    GD.wr32(REG_CSPREAD,   0);      
+    GD.wr32(REG_DITHER,    1);       
 }
 //TFT Riverdi 5"
 
 //TFT Riverdi 5"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21      BT817
-if (SizeFT813==54){
+if (SizeEVE==541){
 	cmd_setrotate(ORIENTACION);
-    GD.wr32(REG_HSIZE, 800);  //      Thd       visible horizontal line length 
-    GD.wr32(REG_VSIZE, 480);  //      Tvd       number of visible lines 
+    GD.wr32(REG_HSIZE,  800);  //      Thdisp       visible horizontal line length 
+    GD.wr32(REG_VSIZE,  480);  //      Tvdisp       number of visible lines 
 
-    GD.wr32(REG_HCYCLE, 816 ); //808 816 896  816 Th       Period time H One Horizontal Line length (visible/invisible)
-    GD.wr32(REG_HOFFSET, 8);  //4   8   48   8   Thb       HS Blanking            
-    GD.wr32(REG_HSYNC0, 8);   //4   8   48   8   Thfp      HS front porch         
-    GD.wr32(REG_HSYNC1, 4);   //2   4   8    4   Thpw/Thw  HS pulse width         
+    GD.wr32(REG_HCYCLE, 816 ); //808 816 896  816  Th       Period time H One Horizontal Line length (visible/invisible)  816
+    GD.wr32(REG_HOFFSET,  8);  //4   8   48   8     Thbp      HS Back porch         8
+    GD.wr32(REG_HSYNC0,   0);   //4   8   48   8     Thfp      HS front porch        8   
+    GD.wr32(REG_HSYNC1,   4);   //2   4   8    4     Thw       HS pulse width        4   
 	
-    GD.wr32(REG_VCYCLE, 496);  //488 496 504  504 Tv        Period time V
-	GD.wr32(REG_VOFFSET, 12);  //4   8   12   12   Tvb       VS Blanking     4
-    GD.wr32(REG_VSYNC0, 8);   //4   8   12   12   Tvfp      VS front porch         
-    GD.wr32(REG_VSYNC1, 4);   //2   4   8    8   Tvpw/Tvw  VS pulse width         
+    GD.wr32(REG_VCYCLE, 496);  //488 496 504  504  Tv        Period time V       496 
+	GD.wr32(REG_VOFFSET,  8);  //4   8   12   12   Tvbp      VS Back porch        12
+    GD.wr32(REG_VSYNC0,   0);   //4   8   12   12    Tvfp      VS front porch        8 
+    GD.wr32(REG_VSYNC1,   4);   //2   4   8    8     Tvw       VS pulse width        4 
 
-    GD.wr32(REG_PCLK, 2);             //2, 1, 0       2:REG_PCLK_FREQ
-	
-	//GD.wr32(REG_PCLK_FREQ, 1);        //0   
-	//GD.wr32(REG_SWIZZLE, 0);          //0 1  3
-    
-	GD.wr32(REG_PCLK_POL, 1);         //1, 0    0 to off vertical lines on horizontal gradients    
-	GD.wr32(REG_CSPREAD, 0);          //0
-	GD.wr32(REG_DITHER, 1);           //1, 0
-	GD.wr32(REG_OUTBITS, 0x360);      //0x360  0xff0
+    GD.wr32(REG_PCLK,     2);             //2, 1, 0       2:REG_PCLK_FREQ              2
+	GD.wr32(REG_SWIZZLE,  0);          //0 1  3                                     0        
+	GD.wr32(REG_PCLK_POL, 1);         //1, 0    0 to off vertical lines on horizontal gradients    1
+	GD.wr32(REG_CSPREAD,  0);          //0                                                          0                 
+	GD.wr32(REG_DITHER,   1);           //1, 0                                                       1
+	//GD.wr32(REG_PCLK_FREQ, 0xD14);        //0                                      0xD14
+		
+	GD.wr32(REG_OUTBITS,  0xfff);      //0x360  0xff0                               
 		
 	//cmd_regwrite(REG_PWM_DUTY, 128);
 	//test with cmd_testcard() in order to correct the timmings   p189, BRT_AN_033_BT81X
 }
 //TFT Riverdi 5"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21      BT817
 
-//TFT Riverdi 10"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21
-if (SizeFT813==100){
+
+if (SizeEVE==54){
 	cmd_setrotate(ORIENTACION);
-    GD.wr32(REG_HSIZE, 1280);  //      Thd       visible horizontal line length 
-    GD.wr32(REG_VSIZE, 800);  //      Tvd       number of visible lines 
+    GD.wr32(REG_HSIZE,   800);  //      Thdisp       visible horizontal line length 
+    GD.wr32(REG_VSIZE,   480);  //      Tvdisp       number of visible lines 
+
+    GD.wr32(REG_HCYCLE,  816 ); //808 816 896  816  Th       Period time H One Horizontal Line length (visible/invisible)  816
+    GD.wr32(REG_HOFFSET,   8);  //4   8   48   8     Thbp      HS Back porch         8
+    GD.wr32(REG_HSYNC0,    0);   //4   8   48   8     Thfp      HS front porch        8   
+    GD.wr32(REG_HSYNC1,    4);   //2   4   8    4     Thw       HS pulse width        4   
+	
+    GD.wr32(REG_VCYCLE,  496);  //488 496 504  504  Tv        Period time V       496 
+	GD.wr32(REG_VOFFSET,   8);  //4   8   12   12   Tvbp      VS Back porch        12
+    GD.wr32(REG_VSYNC0,    0);   //4   8   12   12    Tvfp      VS front porch        8 
+    GD.wr32(REG_VSYNC1,    4);   //2   4   8    8     Tvw       VS pulse width        4 
+
+    GD.wr32(REG_PCLK,      1);             //2, 1, 0       2:REG_PCLK_FREQ              2
+	GD.wr32(REG_SWIZZLE,   0);          //0 1  3                                     0        
+	GD.wr32(REG_PCLK_POL,  1);         //1, 0    0 to off vertical lines on horizontal gradients    1
+	GD.wr32(REG_CSPREAD,   0);          //0                                                          0                 
+	GD.wr32(REG_DITHER,    1);           //1, 0                                                       1
+	GD.wr32(REG_PCLK_FREQ, 0xD14);    //0                                      0xD14
+		
+	//GD.wr32(REG_OUTBITS, 0xfff);      //0x360  0xff0                               
+		
+	//cmd_regwrite(REG_PWM_DUTY, 128);
+	//test with cmd_testcard() in order to correct the timmings   p189, BRT_AN_033_BT81X
+}
+//TFT Riverdi 5"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21      BT817
+
+
+
+//TFT Riverdi 10"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21
+if (SizeEVE==100){
+	cmd_setrotate(ORIENTACION);
+    GD.wr32(REG_HSIZE,  1280);  //      Thd       visible horizontal line length 
+    GD.wr32(REG_VSIZE,   800);  //      Tvd       number of visible lines 
 
     GD.wr32(REG_HCYCLE, 1440); //808 816 896  816 Th        One Horizontal Line length (visible/invisible)
-    GD.wr32(REG_HOFFSET, 88);  //4   8   48   8   Thb       HS Blanking            
-    GD.wr32(REG_HSYNC0, 72);   //4   8   48   8   Thfp      HS front porch         
-    GD.wr32(REG_HSYNC1, 4);   //2   4   8    4   Thpw/Thw  HS pulse width         
+    GD.wr32(REG_HOFFSET,  88);  //4   8   48   8   Thb       HS Blanking            
+    GD.wr32(REG_HSYNC0,   72);   //4   8   48   8   Thfp      HS front porch         
+    GD.wr32(REG_HSYNC1,    4);   //2   4   8    4   Thpw/Thw  HS pulse width         
 	
-    GD.wr32(REG_VCYCLE, 838);  //488 496 504  504 Tv        VS period time         
-    GD.wr32(REG_VOFFSET, 23);  //4   8   12   12   Tvb       VS Blanking            
-    GD.wr32(REG_VSYNC0, 15);   //4   8   12   12   Tvfp      VS front porch         
-    GD.wr32(REG_VSYNC1, 4);    //2   4   8    8   Tvpw/Tvw  VS pulse width         
+    GD.wr32(REG_VCYCLE,  838);  //488 496 504  504 Tv        VS period time         
+    GD.wr32(REG_VOFFSET,  23);  //4   8   12   12   Tvb       VS Blanking            
+    GD.wr32(REG_VSYNC0,   15);   //4   8   12   12   Tvfp      VS front porch         
+    GD.wr32(REG_VSYNC1,    4);    //2   4   8    8   Tvpw/Tvw  VS pulse width         
 
-    GD.wr32(REG_PCLK, 2);             //2, 1, 0       1:REG_PCLK_FREQ
+    GD.wr32(REG_PCLK,      2);             //2, 1, 0       1:REG_PCLK_FREQ
 	GD.wr32(REG_PCLK_FREQ, 0);        //0   
-	GD.wr32(REG_PCLK_2X, 0);          //0,1
-    GD.wr32(REG_SWIZZLE, 0);          //0 1  3
-    GD.wr32(REG_PCLK_POL, 1);         //1, 0
-    GD.wr32(REG_CSPREAD, 1);          //1,0
-    GD.wr32(REG_DITHER, 1);           //1, 0
-	GD.wr32(REG_OUTBITS, 0x360);      //0x360  0xff0
+	GD.wr32(REG_PCLK_2X,   0);          //0,1
+    GD.wr32(REG_SWIZZLE,   0);          //0 1  3
+    GD.wr32(REG_PCLK_POL,  1);         //1, 0
+    GD.wr32(REG_CSPREAD,   1);          //1,0
+    GD.wr32(REG_DITHER,    1);           //1, 0
+	GD.wr32(REG_OUTBITS,   0x360);      //0x360  0xff0
 	//cmd_regwrite(REG_PWM_DUTY, 128);
 }
 //TFT Riverdi 10"   EVE4
 
 //TFT MO BT815 5"
 
-if (SizeFT813==52){
+if (SizeEVE==52){
 	cmd_setrotate(ORIENTACION);
-   GD.wr32(REG_HSIZE, 800);
-    GD.wr32(REG_VSIZE, 480);
+   GD.wr32(REG_HSIZE,       800);
+    GD.wr32(REG_VSIZE,      480);
 
-    GD.wr32(REG_HCYCLE, 928);
-    GD.wr32(REG_HOFFSET, 88);
-    GD.wr32(REG_HSYNC0, 0);
-    GD.wr32(REG_HSYNC1, 48); 
+    GD.wr32(REG_HCYCLE,     928);
+    GD.wr32(REG_HOFFSET,     88);
+    GD.wr32(REG_HSYNC0,       0);
+    GD.wr32(REG_HSYNC1,      48); 
 
-    GD.wr32(REG_VCYCLE, 525);
-    GD.wr32(REG_VOFFSET, 32);
-    GD.wr32(REG_VSYNC0, 0);
-    GD.wr32(REG_VSYNC1, 3);
+    GD.wr32(REG_VCYCLE,     525);
+    GD.wr32(REG_VOFFSET,     32);
+    GD.wr32(REG_VSYNC0,       0);
+    GD.wr32(REG_VSYNC1,       3);
 
-    GD.wr32(REG_PCLK, 2);
+    GD.wr32(REG_PCLK,         2);
     //GD.wr32(REG_SWIZZLE, 0);
-    GD.wr32(REG_PCLK_POL, 1);
-    GD.wr32(REG_CSPREAD, 0);
-    GD.wr32(REG_DITHER, 1);
+    GD.wr32(REG_PCLK_POL,     1);
+    GD.wr32(REG_CSPREAD,      0);
+    GD.wr32(REG_DITHER,       1);
     GD.wr16(REG_TOUCH_CONFIG, 0x05d0);
 }
 //TFT MO BT815 5"
 
 //TFT MO FT813 5"
-if (SizeFT813==53){
+if (SizeEVE==53){
 	cmd_setrotate(ORIENTACION);
-    GD.wr32(REG_HSIZE, 800);
-    GD.wr32(REG_VSIZE, 480);
+    GD.wr32(REG_HSIZE,  800);
+    GD.wr32(REG_VSIZE,  480);
 
     GD.wr32(REG_HCYCLE, 928);
     GD.wr32(REG_HOFFSET, 88);
-    GD.wr32(REG_HSYNC0, 0);
-    GD.wr32(REG_HSYNC1, 48); 
+    GD.wr32(REG_HSYNC0,   0);
+    GD.wr32(REG_HSYNC1,  48); 
 
     GD.wr32(REG_VCYCLE, 525);
     GD.wr32(REG_VOFFSET, 32);
-    GD.wr32(REG_VSYNC0, 0);
-    GD.wr32(REG_VSYNC1, 3);
+    GD.wr32(REG_VSYNC0,   0);
+    GD.wr32(REG_VSYNC1,   3);
 
-    GD.wr32(REG_PCLK, 2);
-    GD.wr32(REG_SWIZZLE, 0);
+    GD.wr32(REG_PCLK,     2);
+    GD.wr32(REG_SWIZZLE,  0);
     GD.wr32(REG_PCLK_POL, 1);
-    GD.wr32(REG_CSPREAD, 0);
-    GD.wr32(REG_DITHER, 1);
+    GD.wr32(REG_CSPREAD,  0);
+    GD.wr32(REG_DITHER,   1);
     //GD.wr16(REG_TOUCH_CONFIG, 0x05D1);
 }
 //TFT MO FT813 5"
 
-if (SizeFT813==35)
+if (SizeEVE==35)
   {
 	  cmd_setrotate(ORIENTACION);
-	GD.wr32(REG_HSIZE, 320);
-	GD.wr32(REG_HCYCLE, 408);
-	GD.wr32(REG_HOFFSET, 70);
-	GD.wr32(REG_HSYNC0, 0);
-	GD.wr32(REG_HSYNC1, 10);
+	GD.wr32(REG_HSIZE,  320);//320
+	GD.wr32(REG_HCYCLE, 408);//408
+	GD.wr32(REG_HOFFSET, 70);//70
+	GD.wr32(REG_HSYNC0,   0);//0
+	GD.wr32(REG_HSYNC1,  10);//10
 
-	GD.wr32(REG_VSIZE, 240);
-	GD.wr32(REG_VCYCLE, 263);
-	GD.wr32(REG_VOFFSET, 13);
-	GD.wr32(REG_VSYNC0, 0);
-	GD.wr32(REG_VSYNC1, 2);
+	GD.wr32(REG_VSIZE,  240);//240
+	GD.wr32(REG_VCYCLE, 263);//263
+	GD.wr32(REG_VOFFSET, 13);//13
+	GD.wr32(REG_VSYNC0,   0);//0
+	GD.wr32(REG_VSYNC1,   2);//2
 
-	GD.wr32(REG_PCLK, 6);//5
-	GD.wr32(REG_SWIZZLE, 2);//3 for GD2
-	GD.wr32(REG_PCLK_POL, 1);//1
-	GD.wr32(REG_CSPREAD, 0);//1
-	GD.wr32(REG_DITHER, 0);
+	GD.wr32(REG_PCLK,     8);//6
+	GD.wr32(REG_SWIZZLE,  2);//2     3 for GD2
+	GD.wr32(REG_PCLK_POL, 0);//1
+	GD.wr32(REG_CSPREAD,  1);//0
+	GD.wr32(REG_DITHER,   1);//0
 	//GD.wr(REG_ROTATE, 0);
   }
 
 
 //TFT Riverdi FT813 7"
-if (SizeFT813==71)
+if (SizeEVE==71)
   {
 	cmd_setrotate(ORIENTACION);
-	GD.wr32(REG_HSIZE, 800);
+	GD.wr32(REG_HSIZE,   800);
 	GD.wr32(REG_HCYCLE, 1056);//1000
-	GD.wr32(REG_HOFFSET, 46);
-	GD.wr32(REG_HSYNC0, 0);
-	GD.wr32(REG_HSYNC1, 10); //41
+	GD.wr32(REG_HOFFSET,  46);
+	GD.wr32(REG_HSYNC0,    0);
+	GD.wr32(REG_HSYNC1,   10); //41
 	
-     GD.wr32(REG_VSIZE, 480);
+     GD.wr32(REG_VSIZE,  480);
      GD.wr32(REG_VCYCLE, 525);
-	GD.wr32(REG_VOFFSET, 23);
-	GD.wr32(REG_VSYNC0, 0);
-	GD.wr32(REG_VSYNC1, 10);
+	GD.wr32(REG_VOFFSET,  23);
+	GD.wr32(REG_VSYNC0,    0);
+	GD.wr32(REG_VSYNC1,   10);
 	
-	GD.wr32(REG_SWIZZLE, 0);//3 for GD2
+	GD.wr32(REG_SWIZZLE,   0);//3 for GD2
 	
-     GD.wr32(REG_PCLK, 2);//5
+     GD.wr32(REG_PCLK,     2);//5
      GD.wr32(REG_PCLK_POL, 1);//1
-	GD.wr32(REG_CSPREAD, 0);
-	GD.wr32(REG_DITHER, 0);
+	GD.wr32(REG_CSPREAD,   0);
+	GD.wr32(REG_DITHER,    0);
   }
 
 
 //TFT NHD FT813 7"
-if (SizeFT813==7)
+if (SizeEVE==7)
   {
 	cmd_setrotate(ORIENTACION);
-	GD.wr32(REG_HSIZE, 800);   //800
-	GD.wr32(REG_HCYCLE, 1056); //1056
-	GD.wr32(REG_HOFFSET, 88);  //46
-	GD.wr32(REG_HSYNC0, 0);    //0
-	GD.wr32(REG_HSYNC1, 48);   //10
+    GD.wr32(REG_HCYCLE,  928);//1056    // 900 //548
+    GD.wr32(REG_HOFFSET,  88);//88     // 46
+    GD.wr32(REG_HSIZE,   800);//800
+    GD.wr32(REG_HSYNC0,    0);//0
+    GD.wr32(REG_HSYNC1,   48);//10      // 41
+    
+	GD.wr32(REG_VCYCLE,  525);//525     // 500
+    GD.wr32(REG_VOFFSET,  32);//32     // 23
+    GD.wr32(REG_VSIZE,   480);//480
+    GD.wr32(REG_VSYNC0,    0);//0
+    GD.wr32(REG_VSYNC1,    3);//10
 	
-     GD.wr32(REG_VSIZE, 480);  //480
-     GD.wr32(REG_VCYCLE, 525); //525
-	GD.wr32(REG_VOFFSET, 32);  //23
-	GD.wr32(REG_VSYNC0, 0);    //0
-	GD.wr32(REG_VSYNC1, 3);   //10
-	
-	GD.wr32(REG_SWIZZLE, 0);   //0
-	
-     GD.wr32(REG_PCLK, 2);     //2
-     GD.wr32(REG_PCLK_POL, 1); //1
-	GD.wr32(REG_CSPREAD, 0);   //0
-	GD.wr32(REG_DITHER, 0);    //0
+    GD.wr32(REG_SWIZZLE,   0);//0  //3 for GD2
+    GD.wr32(REG_PCLK,      2);//2
+    GD.wr32(REG_PCLK_POL,  0);//0
+    GD.wr32(REG_CSPREAD,   0);//0
+    GD.wr32(REG_DITHER,    1);//1
   }
 
 //TFT NHD FT813   4.3"
-if (SizeFT813==43)
+if (SizeEVE==43)
   {
 	cmd_setrotate(ORIENTACION);
-	GD.wr32(REG_HSIZE, 480);
-	GD.wr32(REG_HCYCLE, 548);
-	GD.wr32(REG_HOFFSET, 43);
-	GD.wr32(REG_HSYNC0, 0);
-	GD.wr32(REG_HSYNC1, 41);
+	GD.wr32(REG_HSIZE,  480);//480
+	GD.wr32(REG_HCYCLE, 548);//548
+	GD.wr32(REG_HOFFSET, 43);//43
+	GD.wr32(REG_HSYNC0,   0);//0
+	GD.wr32(REG_HSYNC1,  41);//41
 
-	GD.wr32(REG_VSIZE, 272);
-	GD.wr32(REG_VCYCLE, 292);
-	GD.wr32(REG_VOFFSET, 12);
-	GD.wr32(REG_VSYNC0, 0);
-	GD.wr32(REG_VSYNC1, 10);
+	GD.wr32(REG_VSIZE,  272);//272
+	GD.wr32(REG_VCYCLE, 292);//292
+	GD.wr32(REG_VOFFSET, 12);//12
+	GD.wr32(REG_VSYNC0,   0);//0
+	GD.wr32(REG_VSYNC1,  10);//10
 
-	GD.wr32(REG_PCLK, 5);//5
-	//GD.wr32(REG_SWIZZLE, 0);//3 for GD2
+	GD.wr32(REG_PCLK,     5);//5
+	GD.wr32(REG_SWIZZLE,  0);//0      //3 for GD2
 	GD.wr32(REG_PCLK_POL, 1);//1
-	GD.wr32(REG_CSPREAD, 1);//1
-	GD.wr32(REG_DITHER, 1);
+	GD.wr32(REG_CSPREAD,  1);//1
+	GD.wr32(REG_DITHER,   1);//1
 	//GD.wr(REG_ROTATE, 0);
   }
 
 //TFT MO FT813  3.8"
-if (SizeFT813==38)
+if (SizeEVE==38)
   {
 	cmd_setrotate(ORIENTACION);
-	GD.wr32(REG_HSIZE, 480);    //480
+	GD.wr32(REG_HSIZE,  480);    //480
      GD.wr32(REG_VSIZE, 272);    //272
 	GD.wr32(REG_HCYCLE, 595);   //548   595
 	GD.wr32(REG_HOFFSET, 43);   //43    
-	GD.wr32(REG_HSYNC0, 35);     //0      35
+	GD.wr32(REG_HSYNC0,  35);     //0      35
 	GD.wr32(REG_HSYNC1, 101);    //41    101
 
 	
 	GD.wr32(REG_VCYCLE, 294);   //292     294
 	GD.wr32(REG_VOFFSET, 12);   //12
 	GD.wr32(REG_VSYNC0, 152);   //152
-	GD.wr32(REG_VSYNC1, 10);    //10
+	GD.wr32(REG_VSYNC1,  10);    //10
 
-	GD.wr32(REG_PCLK, 5);       //5
-	GD.wr32(REG_SWIZZLE, 0);    //0, 3 for GD2
+	GD.wr32(REG_PCLK,     5);       //5
+	GD.wr32(REG_SWIZZLE,  0);    //0, 3 for GD2
 	GD.wr32(REG_PCLK_POL, 1);   //1
-	GD.wr32(REG_CSPREAD, 1);    //1
-	GD.wr32(REG_DITHER, 1);     //1 
+	GD.wr32(REG_CSPREAD,  1);    //1
+	GD.wr32(REG_DITHER,   1);     //1 
 	//GD.wr(REG_ROTATE, 0);
   }
 
 
-if (SizeFT813==5)
+if (SizeEVE==5)
   {
+
 	cmd_setrotate(ORIENTACION);
-    GD.wr32(REG_HCYCLE, 1056);    // 900 //548
-    GD.wr32(REG_HOFFSET, 88);     // 46
-    GD.wr32(REG_HSIZE, 800);
-    GD.wr32(REG_HSYNC0, 0);
-    GD.wr32(REG_HSYNC1, 10);      // 41
-    GD.wr32(REG_VCYCLE, 525);     // 500
-    GD.wr32(REG_VOFFSET, 32);     // 23
-    GD.wr32(REG_VSIZE, 480);
-    GD.wr32(REG_VSYNC0, 0);
-    GD.wr32(REG_VSYNC1, 10);
+    GD.wr32(REG_HCYCLE, 1056);    
+    GD.wr32(REG_HOFFSET,  46);     
+    GD.wr32(REG_HSIZE,   800);
+    GD.wr32(REG_HSYNC0,    0);
+    GD.wr32(REG_HSYNC1,   10);      
+    GD.wr32(REG_VCYCLE,  525);     
+    GD.wr32(REG_VOFFSET,  23);     
+    GD.wr32(REG_VSIZE,   480);
+    GD.wr32(REG_VSYNC0,    0);
+    GD.wr32(REG_VSYNC1,   10);
 
-	//GD.wr32(REG_SWIZZLE, 0);//3 for GD2
-
-    GD.wr32(REG_PCLK, 2);
-    GD.wr32(REG_PCLK_POL, 0);
-    GD.wr32(REG_CSPREAD, 0);       
-    GD.wr32(REG_DITHER, 1);        
+    GD.wr32(REG_PCLK,      2);
+    GD.wr32(REG_PCLK_POL,  0);
+    GD.wr32(REG_CSPREAD,   0);      
+    GD.wr32(REG_DITHER,    1);      
+	
+//	cmd_setrotate(ORIENTACION);
+//    GD.wr32(REG_HCYCLE,  928);//1056    // 900 //548
+//    GD.wr32(REG_HOFFSET,  88);//88     // 46
+//    GD.wr32(REG_HSIZE,   800);//800
+//    GD.wr32(REG_HSYNC0,    0);//0
+//    GD.wr32(REG_HSYNC1,   48);//10      // 41
+    
+//	GD.wr32(REG_VCYCLE,  525);//525     // 500
+//    GD.wr32(REG_VOFFSET,  32);//32     // 23
+//    GD.wr32(REG_VSIZE,   480);//480
+//    GD.wr32(REG_VSYNC0,    0);//0
+//    GD.wr32(REG_VSYNC1,    3);//10
+	
+//    GD.wr32(REG_PCLK,      2);//2
+//	GD.wr32(REG_SWIZZLE,   0);//0  //3 for GD2
+//    GD.wr32(REG_PCLK_POL,  0);//0
+//    GD.wr32(REG_CSPREAD,   1);//0
+//    GD.wr32(REG_DITHER,    1);//1     
   }
 
   }
@@ -985,7 +1084,9 @@ if (SizeFT813==5)
   flush();
 
 //#if (EVETFTonTeensyX==1)
-#ifdef TEENSYDUINO  	  	
+#ifdef TEENSYDUINO
+ if (NHDTouch==1)
+ {  	  	
   if ((EEPROM.read(0) == 0)) 
    {
       self_calibrate();
@@ -999,14 +1100,15 @@ if (SizeFT813==5)
         {
          GDTR.wr(REG_TOUCH_TRANSFORM_A + i, EEPROM.read(1 + i));
         }
-    }
+           }	
+  }
 #endif
 
 #if defined(ARDUINO_ARCH_STM32)
  if (NHDTouch==1)
  {
  AT24Cxx eep(i2c_address, 32);
- if (eep.read(0) != 0x1) {
+ if (eep.read(0) == 0) {
  self_calibrate();
       for (int i = 0; i < 24; i++) 
       {eep.write(1 + i, GDTR.rd(REG_TOUCH_TRANSFORM_A + i));
@@ -1033,7 +1135,7 @@ if (SizeFT813==5)
   ClearColorRGB(0x005500);
   Clear();
 
-   if(SizeFT813==54)
+   if(SizeEVE==54)
    {
 	 ClearColorRGB(0x000055);
      Clear();
@@ -1804,7 +1906,7 @@ void GDClass::cmd_setmatrix(void) {
 }
 
 //BT817
-#if (SizeFT813==54)
+#if (SizeEVE==54)
 void GDClass::cmd_testcard(void) {
   cFFFFFF(0x61);
 }
@@ -2141,20 +2243,50 @@ byte GDClass::loadSdFat(FsFile& archivo, FUNC_POINTER progress)
     }	
             
     GD.resume();
-    SPI.endTransaction();
+	#ifdef TEENSYDUINO
+	 #if defined(ARDUINO_TEENSY32)
+	  //SPI.endTransaction();
+	 #else
+	
+     SPI.endTransaction();
+	 #endif
+	#endif
 	
   #if(STM32_CPU == 4110)
      //SPI_2.endTransaction(SD_PIN);
   #endif    	
+
+  #if(STM32_CPU == 7670)
+     SPI_3.endTransaction(SD_PIN);
+  #endif
+  
+  #if(STM32_CPU == 7460)
+     SPI_3.endTransaction(SD_PIN);
+  #endif  
 	
     return 1;
   }
   GD.resume();
-  SPI.endTransaction();
+  #ifdef TEENSYDUINO
+	 #if defined(ARDUINO_TEENSY32)
+	  //SPI.endTransaction();
+	 #else
+	
+     SPI.endTransaction();
+	 #endif
+  #endif
   
   #if(STM32_CPU == 4110)
      //SPI_2.endTransaction(SD_PIN);
   #endif      
+  
+  #if(STM32_CPU == 7670)
+   //  SPI_3.endTransaction(SD_PIN);
+  #endif  
+  
+  #if(STM32_CPU == 7460)
+     //SPI_3.endTransaction(SD_PIN);
+  #endif    
   
   return 0;
 }

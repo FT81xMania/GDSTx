@@ -2,71 +2,77 @@
  * Gameduino 2/3 library for Arduino, Arduino Due, Raspberry Pi,
  * Teensy 3.x/4.0, ESP8266 and ESP32.
  * https://github.com/jamesbowman/gd2-lib
- *  
+ *
+ * In memory of mi brother Thomas (lighcalamar). THX bro for your teachings
  * Modified by TFTLCDCyg to Teensy 4/4.1 SDIO system               							-- 09 March 2021
- * Riverdi FT801@4.3"
- * Riverdi FT813@5"
- * Riverdi FT813@7"
- * NHD FT813@3.5"
- * NHD FT813@4.3"
- * NHD FT813@5"
- * NHD FT813@7"
- * Support for SdFat Beta (Greimann)                               							-- 12 April 2021
- * Add timmings for Riverdi BT817@5"                               							-- 01 Sept  2021
- * Add STM32 boards support (for F411CE and F407VG, STM32-Danielef Core) 					-- 13 April 2022 
+ * Riverdi FT801@4.3"                                                                    0
+ * Riverdi FT813@5"                                                                     51
+ * Riverdi FT813@7"                                                                     71
+ * NHD FT813@3.5"                                                                       35
+ * NHD FT813@4.3"                                                                       43
+ * NHD FT813@5"                                                                          5
+ * NHD FT813@7"                                                                          7
+ * Support for SdFat V2 (Greimann)                               							-- 12 April 2021
+ * source: https://github.com/greiman/SdFat
+ * Add timmings for Riverdi BT817@5"                               					    54	-- 01 Sept  2021
+ * source: https://riverdi.com/download/RVT50HQBNWC00-B/DS_RVT50HQBNWC00-B_Rev.1.4.pdf                  p-13
+ * Add STM32 boards support (for F411CE and F407VG, STM32-Danieleff Core) 		      4073 	-- 13 April 2022
+ * source: https://github.com/danieleff/STM32GENERIC 
  * Add BT817 for STM32 and teensy 4.1                              							-- 25 June  2022
  * Asset loading fix and renaming library to GDSTx, fixes for VET6, M3DEMO and M4DEMO		-- 31 Aug   2022
- * Add STM32 boards (support for Core7XXI and Nucleo-F767ZI, STM32-Danielef Core)			-- 31 Aug   2022
- * Add Matrix Orbital EVE3 BT815@5"															-- 03 Oct   2022
+ * Add STM32 boards (support for Core7XXI and Nucleo-F767ZI, STM32-Danieleff Core)  746,767	-- 31 Aug   2022
+ * Add Matrix Orbital EVE3 BT815@5"		                                                52 	-- 03 Oct   2022
+ * Add config.h; entry SizeFT813 renamed to SizeEVE   FT800/FT801-respond                   -- 28 Oct   2022
+ * Add support for Core7XXI-F746IG (STM32 Core official 1.9.0, Nucleo F746ZG)         7460  -- 05 Nov   2022 
+ * Add support for Nucleo H743ZI and Nucleo F767ZI (STM32 Core official 1.9.0)        7670  -- 05 Nov   2022
+ * json path: https://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json
+ * Correction of the timing tables for the NHD TFT-EVE 2                                    -- 07 Nov   2022
+ * source: https://github.com/NewhavenDisplay/EVE2-TFT-Gamduino2-Library/blob/main/NHD-Gameduino2-AppNotes.pdf
+ * Test for Gameduino3-shield on STM32                                                      -- 09 Dec   2022
+ * Rename SizeFT813 to SizeEVE and add config.h file                                        -- 06 Jan   2023
+ * Update to version 2.01                                                                   -- 06 Jan   2023
  */
- //FT81xmania team
+//FT81xmania team
 
 #ifndef _GDSTx_H_INCLUDED
 #define _GDSTx_H_INCLUDED
 
 //FT81xmania team
 
-#define GDT4Xv134_VERSION  "2.0 T4x-STM32"
-#define GD23X_VERSION      "2.0 T4x-STM32"
-#define GD23ZUTX_VERSION   "2.0 T4x-STM32"
+#define GDT4Xv134_VERSION  "2.1 T4x-STM32"
+#define GD23X_VERSION      "2.1 T4x-STM32"
+#define GD23ZUTX_VERSION   "2.1 T4x-STM32"
+#define GDSTx_VERSION      "2.1 T4x-STM32"
 
 #include "SPI.h"
 #include "SdFat.h"
 #include "Arduino.h"
+
+#include "config.h"
 
 #define JPGsizeX   					 0        //under test
 #define JPGsizeY   					 0        //under test
 #define  H743    					 0        //under test
 #define POR_PIN  					 0        //under test 
 
-#if defined(ARDUINO_TEENSY32)
-  #define SD_PIN 			 		 5        //under test
+#ifdef TEENSYDUINO
+
+#if (SizeEVE==0)
+ #define SetSPISpeed   		  29000000   // 29000000 --- gameduino3 shield
+ //#define SetSPISpeed   		  30000000   // 30000000 --- specific FT801/FT800
+ //#define POR_PIN                  33   //No conectar
 #endif
 
-#ifdef TEENSYDUINO                  //*******************************************************Teensy 4x/3x boards setup: CS-TFT, Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
- 
-		#define CS 			        10
-		#define SizeFT813           52   // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
-		#define ORIENTACION     	 0   // 0, 1, 2, 3, FT81X/BT81X   0 normal  
-		#define ROTACION        	 1   // 0,1         FT80x
-		#define SetSPISpeed   36000000   // general
-
-
-#if (SizeFT813==0)
- #define SetSPISpeed   		  30000000   // 30000000 --- specific FT801/FT800
- //#define POR_PIN                    33
-#endif
-
-	#if (SizeFT813==54)
+	#if (SizeEVE==54)
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
  
-	#if (SizeFT813==52)
+	#if (SizeEVE==52)
 		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
  
-#endif                              //*******************************************************Teensy 4x/3x boards setup: CS-TFT, Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
+#endif
 
 #if defined(ARDUINO_ARCH_STM32)     //*******************************************************STM32 boards setup: EEPROM source, CS-TFT, MCU, SD_PIN, SDSpeed
 
@@ -75,16 +81,13 @@
 
   #if (EEPROM_SOURCE == 0)
    #define i2c_address     		  0x50    //EEPROM breakout like 24FC512
-//   #define i2c_address     	    0x51  
+//   #define i2c_address     	  0x51  
   #endif
 
   #if (EEPROM_SOURCE == 1)
    #define i2c_address     		  0x57   //EEPROM on DS3231
   #endif
 
- #define CS 			   		   PA4
- #define STM32_CPU         		  4073                              //767, 4073, 411,  746   //4073   M4DEMO y F407VG-Danieleff y SdFat V2 oficial  F411CE-Black
- #define NHDTouch 		   			 0            //1 cargar rutinas panel tactil    0 NHD normal aparentemente no lo requiere?¿
 
  #if(STM32_CPU == 103) 
     #define SD_PIN          	  PB12  //PB12 SPI2-F103   Danieleff-Core          M3DEMO - funciona sin problemas
@@ -119,40 +122,59 @@
      #define SetSDSpeed      	    36  
   #endif  
 
+
+  #if(STM32_CPU == 7670)   
+     #define SD_PIN          PB11  //PB11 o PA15 SPI3-F767/H743, PA11 SPI2-F767
+     #define SetSDSpeed      48
+  #endif
+
+
+  #if(STM32_CPU == 7460) 
+     #define SD_PIN        		  PA15  //PA15  SPI3 F429 y Core7XXI          no funciona bien revisar variante    
+     #define SetSDSpeed             36  
+  #endif
+
+
 #endif                              //*******************************************************STM32 boards setup: EEPROM source, CS-TFT, MCU, SD_PIN, SDSpeed
 
 
 #if defined(ARDUINO_ARCH_STM32)     //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
 
- #define SizeFT813      	 		 35 // NHD: 7-7",  5-5", 43-4.3", 35-3.5", Riverdi: 51-5", 71-7", MO: 38-3.8"FT813, MO: 52-5"BT815, MO: 53-5"FT813, Riverdi: 54-5"  BT817, 0 Riverdi FT801/FT800 4.3", Riverdi: 100-10" BT817
- #define ORIENTACION     	 		 0  // 0, 1, 2, 3, FT81X/BT81X   0 normal  1-MO38
- #define ROTACION        	 		 0  // 0,1         FT80x
-
 //*************** User editable line to select EVE TFT size
-#if (SizeFT813==0)
- #define SetSPISpeed   		  16000000   //14000000
+#if (SizeEVE==0)
+ #define SetSPISpeed   		  36000000   //14000000  24000000-FT843        36000000-NHD43
+
+//  #if(STM32_CPU == 4073)
+//    #define POR_PIN                PE1	  //Si funciona XD XD F407VG
+//  #endif
+
 #endif
-#if (SizeFT813==38)
+#if (SizeEVE==38)
  #define SetSPISpeed   		  30000000
 #endif
-#if (SizeFT813==35)
+#if (SizeEVE==35)
  #define SetSPISpeed   		  36000000   //36000000   
 
  #if(STM32_CPU == 103) 
-  #define SetSPISpeed  		  29000000   //para F103VET6
+  #define SetSPISpeed  		  36000000   //para 29-F103VET6
  #endif 
   
 #endif
-#if (SizeFT813==43)
+#if (SizeEVE==43)
  #define SetSPISpeed   		  36000000   //36000000
 #endif
-#if (SizeFT813==5)
+#if (SizeEVE==5)
+  #define SetSPISpeed   		  36000000
+  
+  #if(STM32_CPU == 103)
+    #define SetSPISpeed   		  36000000
+  #endif	
+
+#endif
+#if (SizeEVE==51)
  #define SetSPISpeed   		  36000000
 #endif
-#if (SizeFT813==51)
- #define SetSPISpeed   		  36000000
-#endif
-#if (SizeFT813==52)
+#if (SizeEVE==52)
  #define SetSPISpeed   		  32000000    //36000000
 
   #if(STM32_CPU == 4073)
@@ -173,11 +195,11 @@
 
 #endif
 
-#if (SizeFT813==53)
+#if (SizeEVE==53)
  #define SetSPISpeed   		  36000000
 #endif
 
-#if (SizeFT813==54)
+#if (SizeEVE==54)
  #define SetSPISpeed   		  36000000     //32    36
 
   #if(STM32_CPU == 4073)
@@ -198,15 +220,15 @@
 
 #endif
 
-#if (SizeFT813==7)
+#if (SizeEVE==7)
  #define SetSPISpeed   		  36000000
 #endif
 
-#if (SizeFT813==71)
+#if (SizeEVE==71)
  #define SetSPISpeed   		  34000000
 #endif
 
-#if (SizeFT813==100)
+#if (SizeEVE==100)
  #define SetSPISpeed   		  36000000
 #endif
  
@@ -301,7 +323,7 @@ public:
   void polar(int &x, int &y, int16_t r, uint16_t th);
   uint16_t atan2(int16_t y, int16_t x);
 
-#if !defined(ESP8266) && !defined(ESP32) && !defined(TEENSYDUINO)
+#if !defined(TEENSYDUINO)
   void copy(const PROGMEM uint8_t *src, int count);
 #else
   void copy(const uint8_t *src, int count);
@@ -318,12 +340,7 @@ public:
   void sample(uint32_t start, uint32_t len, uint16_t freq, uint16_t format, int loop = 0);
 
   void get_inputs(void);
-  void get_accel(int &x, int &y, int &z);
-  struct _wii {
-      byte active;
-      xy l, r;
-      uint16_t buttons;
-  };
+  
   struct {
     uint16_t track_tag;
     uint16_t track_val;
@@ -337,7 +354,6 @@ public:
     uint8_t ptag;
     uint8_t touching;
     xy xytouch;
-    struct _wii wii[2];
   } inputs;
 
   void AlphaFunc(byte func, byte ref);
@@ -451,7 +467,7 @@ public:
   void cmd_setmatrix(void);
   
   //BT817
-#if (SizeFT813==54)
+#if (SizeEVE==54)
   void cmd_testcard(void);
 #endif  
   //BT817
@@ -1116,18 +1132,20 @@ public:
     }
   }
   void play() {
-if(SizeFT813==35){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
-if(SizeFT813==43){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
-if(SizeFT813==38){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
-if(SizeFT813==51){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
-if(SizeFT813==52){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
-if(SizeFT813==71){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
+if(SizeEVE==0){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{	  
+if(SizeEVE==35){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
+if(SizeEVE==43){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
+if(SizeEVE==38){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
+if(SizeEVE==51){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
+if(SizeEVE==52){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
+if(SizeEVE==71){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);
      }
     }
    }
   }
  }
+}
 }
     // Delete OPT_FULLSCREEN
 
@@ -1140,17 +1158,9 @@ GD.flush();
 };
 //FT81xmania Team
 
-
-/*
- * PROGMEM declarations are currently not supported by the ESP8266
- * compiler. So redefine PROGMEM to nothing.
- */
-
-#if defined(ESP8266) || defined(ARDUINO_ARCH_STM32L4) || defined(TEENSYDUINO)
+#if defined(ARDUINO_ARCH_STM32) || defined(TEENSYDUINO)
 #undef PROGMEM
 #define PROGMEM
 #endif
-
-
 
 #endif
