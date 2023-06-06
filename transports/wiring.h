@@ -31,6 +31,12 @@ digitalWrite(POR_PIN, HIGH);
 delay(100);
 }
 
+if (SizeEVE==431){   //FT815/16 MO
+pinMode(POR_PIN, OUTPUT);
+digitalWrite(POR_PIN, HIGH);    
+delay(100);
+}
+
 if (SizeEVE==54){   //BT817
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
@@ -69,7 +75,7 @@ delay(100);
   }
   
   
-  void begin1() {
+void begin1() {
 
 #if 1
     delay(320);
@@ -122,6 +128,7 @@ delay(100);
     case 0x15: ft8xx_model = 2;  BT8XX = __rd16(0x0c0000) >> 8; break;
     case 0x16: ft8xx_model = 2;  BT8XX = __rd16(0x0c0000) >> 8; break;
 	case 0x17: ft8xx_model = 3;  BT8XX = __rd16(0x0c0000) >> 8; break;
+	case 0x18: ft8xx_model = 3;  BT8XX = __rd16(0x0c0000) >> 8; break;	
     default:   ft8xx_model = 3;  BT8XX = __rd16(0x0c0000) >> 8; break;
 	
     }
