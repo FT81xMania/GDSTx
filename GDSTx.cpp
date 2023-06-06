@@ -568,17 +568,17 @@ void GDClass::tune(void)
 	
   if (BT8XX==1)
  {
-  //Serial.print("FT80");  Serial.println(BT8XX, HEX);
+  Serial.print("FT80");  Serial.println(BT8XX, HEX);
  }
  
  if (BT8XX==19)
  {
-  //Serial.print("FT8");  Serial.println(BT8XX, HEX); 
+  Serial.print("FT8");  Serial.println(BT8XX, HEX); 
  }
  
  if (BT8XX>19)
  {
-  //Serial.print("BT8");  Serial.println(BT8XX, HEX); 
+  Serial.print("BT8");  Serial.println(BT8XX, HEX); 
  } 
  //Serial.print("TFT id: ");  Serial.println(SizeEVE);  Serial.print("SPI-1 speed: ");   Serial.println(SetSPISpeed);
  //Serial.print("TFT id: ");  Serial.println(SizeEVE);  
@@ -615,6 +615,10 @@ LOW_FREQ_BOUND =  47040000UL;  //
 
 if (SizeEVE==43){                   //FT813
 LOW_FREQ_BOUND =  47040000UL;  //
+}
+
+if (SizeEVE==431){               // BT815/16
+LOW_FREQ_BOUND =  59000000UL;    // 
 }
 
 if (SizeEVE==51){                   //FT813
@@ -655,12 +659,12 @@ void GDClass::begin(int cs) {
   //byte external_crystal = 0;
   
   //#if defined(ARDUINO_TEENSY32)
-  #if defined(ARDUINO_ARCH_STM32)
-    //SD.begin( SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(36)) );
-	SD.begin(SD_CONFIG);
-  #endif	
+#if defined(ARDUINO_ARCH_STM32)
+   //SD.begin( SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(36)) );
+   SD.begin(SD_CONFIG);
+#endif	
 
-#ifdef TEENSYDUINO  	  
+#ifdef TEENSYDUINO
  #if defined(ARDUINO_TEENSY32)
    //SD.begin(SD_CONFIG);
  #else    
@@ -1013,6 +1017,32 @@ if (SizeEVE==43)
 	GD.wr32(REG_DITHER,   1);//1
 	//GD.wr(REG_ROTATE, 0);
   }
+
+
+//TFT MO EVE3x-43    4.3"
+if (SizeEVE==431)
+  {
+	cmd_setrotate(ORIENTACION);
+	GD.wr32(REG_HSIZE,  480);//480
+	GD.wr32(REG_HCYCLE, 548);//548
+	GD.wr32(REG_HOFFSET, 43);//43
+	GD.wr32(REG_HSYNC0,   0);//0
+	GD.wr32(REG_HSYNC1,  41);//41
+
+	GD.wr32(REG_VSIZE,  272);//272
+	GD.wr32(REG_VCYCLE, 292);//292
+	GD.wr32(REG_VOFFSET, 12);//12
+	GD.wr32(REG_VSYNC0,   0);//0
+	GD.wr32(REG_VSYNC1,  10);//10
+
+	GD.wr32(REG_PCLK,     5);//5
+	GD.wr32(REG_SWIZZLE,  0);//0      //3 for GD2
+	GD.wr32(REG_PCLK_POL, 1);//1
+	GD.wr32(REG_CSPREAD,  1);//1
+	GD.wr32(REG_DITHER,   1);//1
+	//GD.wr(REG_ROTATE, 0);
+  }
+
 
 //TFT MO FT813  3.8"
 if (SizeEVE==38)

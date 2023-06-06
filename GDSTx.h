@@ -67,6 +67,11 @@
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
  
+ 	#if (SizeEVE==431)
+		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
+		#define POR_PIN             24	  //06 Junio 2023 Reset-PD Pin
+	#endif
+ 
 	#if (SizeEVE==52)
 		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
@@ -124,8 +129,8 @@
 
 
   #if(STM32_CPU == 7670)   
-     #define SD_PIN          PB11  //PB11 o PA15 SPI3-F767/H743, PA11 SPI2-F767
-     #define SetSDSpeed      48
+     #define SD_PIN          	  PB11  //PB11 o PA15 SPI3-F767/H743, PA11 SPI2-F767
+     #define SetSDSpeed      	    48
   #endif
 
 
@@ -164,10 +169,10 @@
  #define SetSPISpeed   		  36000000   //36000000
 #endif
 #if (SizeEVE==5)
-  #define SetSPISpeed   		  36000000
+  #define SetSPISpeed   	  36000000
   
   #if(STM32_CPU == 103)
-    #define SetSPISpeed   		  36000000
+    #define SetSPISpeed   	  36000000
   #endif	
 
 #endif
@@ -807,6 +812,7 @@ typedef struct {
 #define REG_PCLK_2X      		0x00302618
 #define REG_ANIM_ACTIVE  		0x0030902C
 #define REG_CTOUCH_MODE         0x003104UL
+#define REG_CTOUCH_EXTENDED     0x003108UL
 // FT817/18 only registers
 
 //FT81xmania
