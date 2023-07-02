@@ -21,9 +21,8 @@ Without any interest, we publish this library altruistically."
 ![FT81xMania](NHD43.jpg?raw=true "GDSTx")
 NHD 5" FT813 + Teensy 4.1
 
-Wiring
-
 ![FT81xMania](NHD_header-20pin.png?raw=true "GDSTx")
+Wiring
 
 # STM32F support
 * STM32F103x (F103C8, M3-DEMO)
