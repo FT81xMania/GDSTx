@@ -19,10 +19,10 @@ Without any interest, we publish this library altruistically."
 * Teensy 3.5 and Teensy 3.6
 
 ![FT81xMania](NHD43.jpg?raw=true "GDSTx")
-
-![FT81xMania](NHD_header-20pin.png?raw=true "GDSTx")
-
 NHD 5" FT813 + Teensy 4.1
+
+Wiring
+![FT81xMania](NHD_header-20pin.png?raw=true "GDSTx")
 
 # STM32F support
 * STM32F103x (F103C8, M3-DEMO)
