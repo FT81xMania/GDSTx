@@ -24,7 +24,7 @@ NHD 4.3" FT813 + Teensy 4.1
 
 ![FT81xMania](NHD_header-20pin.png?raw=true "GDSTx")
 
-Wiring
+Wiring 20 header pin to MCU
 
 # STM32F support
 * STM32F103x (F103C8, M3-DEMO)
