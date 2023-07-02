@@ -20,7 +20,7 @@ Without any interest, we publish this library altruistically."
 
 ![FT81xMania](NHD43.jpg?raw=true "GDSTx")
 
-NHD 5" FT813 + Teensy 4.1
+NHD 4.3" FT813 + Teensy 4.1
 
 ![FT81xMania](NHD_header-20pin.png?raw=true "GDSTx")
 
