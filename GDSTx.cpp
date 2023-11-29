@@ -32,7 +32,6 @@
  * Rename SizeFT813 to SizeEVE and add config.h file                                        -- 06 Jan   2023
  * Update to version 2.01                                                                   -- 06 Jan   2023
  * Add MO EVE3x-43 timings                                                                  -- 06 Jun   2023
- * Add Riverdi RVT70HSBNWN00 timings                                                        -- 29 Nov   2023
  */
  //FT81xmania team	
 
@@ -856,13 +855,14 @@ if (SizeEVE==74){
 	GD.wr32(REG_PCLK_POL,   1);  
 	GD.wr32(REG_CSPREAD,    0);  
 	GD.wr32(REG_DITHER,     0);  
-	GD.wr32(REG_PCLK_FREQ,  0xD12);  
+	GD.wr32(REG_PCLK_FREQ,  0xD12);
 		
 	//GD.wr32(REG_OUTBITS, 0xfff);      //0x360  0xff0                               
 		
+	//cmd_regwrite(REG_PWM_DUTY, 128);
 	//test with cmd_testcard() in order to correct the timmings   p189, BRT_AN_033_BT81X
 }
-//TFT Riverdi 7"             EVE4     Datasheet Rev.1.7 2022-11-30   p.14/19      BT817
+//TFT Riverdi 5"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21      BT817
 
 
 //TFT Riverdi 10"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21
@@ -1220,7 +1220,7 @@ if (SizeEVE==5)
   ClearColorRGB(0x005500);
   Clear();
 
-   if(SizeEVE==54)  //para realizar pruebas de funcionamiento en BT817
+   if(SizeEVE==54)
    {
 	 ClearColorRGB(0x000055);
      Clear();
@@ -1238,6 +1238,7 @@ if (SizeEVE==5)
 	 cmd_text(w / 2, (h / 2)-32, 30, OPT_CENTER, "EVE-1/2/3/4 on line");
 	 cmd_text(w / 2, h / 2, 30, OPT_CENTER, "FT81XMania.com");
      //cmd_spinner(w / 2, (h / 2)+ 0.1*h, 1, 0);  //falla en BT817
+	 delay(500);
 	 swap();
    }
     
@@ -1995,7 +1996,7 @@ void GDClass::cmd_setmatrix(void) {
 void GDClass::cmd_testcard(void) {
   cFFFFFF(0x61);
 }
-#endif  
+#endif
 
 #if (SizeEVE==74)
 void GDClass::cmd_testcard(void) {
