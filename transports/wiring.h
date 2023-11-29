@@ -31,13 +31,19 @@ digitalWrite(POR_PIN, HIGH);
 delay(100);
 }
 
-if (SizeEVE==431){   //FT815/16 MO
+//if (SizeEVE==431){   //FT815/16 MO
+//pinMode(POR_PIN, OUTPUT);
+//digitalWrite(POR_PIN, HIGH);    
+//delay(100);
+//}
+
+if (SizeEVE==54){   //BT817
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
 delay(100);
 }
 
-if (SizeEVE==54){   //BT817
+if (SizeEVE==74){   //BT817
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
 delay(100);
@@ -57,6 +63,7 @@ delay(100);
  #if defined(ARDUINO_TEENSY32)
 	pinMode(SD_PIN, OUTPUT);
     digitalWrite(SD_PIN, HIGH);
+	//SD.begin(SD_PIN);
   #endif
 
 #if defined(ARDUINO_ARCH_STM32)
