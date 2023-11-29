@@ -858,12 +858,9 @@ if (SizeEVE==74){
 	GD.wr32(REG_DITHER,     0);  
 	GD.wr32(REG_PCLK_FREQ,  0xD12);
 		
-	//GD.wr32(REG_OUTBITS, 0xfff);      //0x360  0xff0                               
-		
-	//cmd_regwrite(REG_PWM_DUTY, 128);
 	//test with cmd_testcard() in order to correct the timmings   p189, BRT_AN_033_BT81X
 }
-//TFT Riverdi 5"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21      BT817
+//TFT Riverdi 7"             EVE4     Datasheet Rev.1.7 2022-11-30   p.14/19      BT817
 
 
 //TFT Riverdi 10"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21
