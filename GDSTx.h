@@ -32,6 +32,7 @@
  * Rename SizeFT813 to SizeEVE and add config.h file                                        -- 06 Jan   2023
  * Update to version 2.01                                                                   -- 06 Jan   2023
  * Add MO EVE3x-43 timings                                                                  -- 06 Jun   2023
+ * Add Riverdi RVT70HSBNWN00 timings                                                        -- 29 Nov   2023
  */
 //FT81xmania team
 
@@ -68,10 +69,22 @@
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
  
+ 	#if (SizeEVE==74)
+		#define POR_PIN             24	  // 29Nov2023
+	#endif
+ 
  	#if (SizeEVE==431)
 		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
-		#define POR_PIN             24	  //06 Junio 2023 Reset-PD Pin
+		//#define POR_PIN             24	  //06 Junio 2023 Reset-PD Pin   revisar si funciona en EVE3x-43
 	#endif
+ 
+  	#if (SizeEVE==43)
+		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
+	#endif
+ 
+  	#if (SizeEVE==5)
+		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
+	#endif 
  
 	#if (SizeEVE==52)
 		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
@@ -474,6 +487,10 @@ public:
   
   //BT817
 #if (SizeEVE==54)
+  void cmd_testcard(void);
+#endif  
+
+#if (SizeEVE==74)
   void cmd_testcard(void);
 #endif  
   //BT817
@@ -1147,7 +1164,7 @@ if(SizeEVE==38){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}el
 if(SizeEVE==51){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
 if(SizeEVE==52){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
 if(SizeEVE==71){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
-GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);
+GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);
      }
     }
    }
