@@ -32,6 +32,7 @@
  * Rename SizeFT813 to SizeEVE and add config.h file                                        -- 06 Jan   2023
  * Update to version 2.01                                                                   -- 06 Jan   2023
  * Add MO EVE3x-43 timings                                                                  -- 06 Jun   2023
+ * Add Riverdi RVT70HSBNWN00 timings                                                        -- 29 Nov   2023
  */
  //FT81xmania team	
 
