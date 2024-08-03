@@ -10,16 +10,16 @@ public:
 //if (SizeEVE==0){   //
 //pinMode(POR_PIN, OUTPUT);
 //digitalWrite(POR_PIN, HIGH);
-//delay(100);
+//delay(100); 
 //}
 
-if (SizeEVE==52){   //BT815 MO
+if (SizeEVE==52){   //FT813 MO
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);
 delay(100);
 }
 
-if (SizeEVE==53){   //FT813 MO
+if (SizeEVE==53){   //BT815 MO
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
 delay(100);
@@ -36,6 +36,12 @@ delay(100);
 //digitalWrite(POR_PIN, HIGH);    
 //delay(100);
 //}
+
+if (SizeEVE==434){   //BT817
+pinMode(POR_PIN, OUTPUT);
+digitalWrite(POR_PIN, HIGH);    
+delay(100);
+}
 
 if (SizeEVE==54){   //BT817
 pinMode(POR_PIN, OUTPUT);
@@ -60,13 +66,18 @@ delay(100);
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
 
- #if defined(ARDUINO_TEENSY32)
+#if defined(ARDUINO_TEENSY32)
 	pinMode(SD_PIN, OUTPUT);
     digitalWrite(SD_PIN, HIGH);
 	//SD.begin(SD_PIN);
   #endif
 
 #if defined(ARDUINO_ARCH_STM32)
+	pinMode(SD_PIN, OUTPUT);
+    digitalWrite(SD_PIN, HIGH);
+  #endif
+
+#if defined(ARDUINO_ARCH_RP2040)
 	pinMode(SD_PIN, OUTPUT);
     digitalWrite(SD_PIN, HIGH);
   #endif
