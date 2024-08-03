@@ -4,7 +4,7 @@
  * https://github.com/jamesbowman/gd2-lib
  *
  * In memory of mi brother Thomas (lighcalamar). THX bro for your teachings
- * Modified by TFTLCDCyg to Teensy 4/4.1 SDIO system               							-- 09 March 2021
+ * Modified by TFTLCDCyg to Teensy 4/4.1 SDIO system               							    -- 09 March 2021
  * Riverdi FT801@4.3"                                                                    0
  * Riverdi FT813@5"                                                                     51
  * Riverdi FT813@7"                                                                     71
@@ -12,27 +12,31 @@
  * NHD FT813@4.3"                                                                       43
  * NHD FT813@5"                                                                          5
  * NHD FT813@7"                                                                          7
- * Support for SdFat V2 (Greimann)                               							-- 12 April 2021
+ * Support for SdFat V2 (Greimann)                               							    -- 12 April 2021
  * source: https://github.com/greiman/SdFat
- * Add timmings for Riverdi BT817@5"                               					    54	-- 01 Sept  2021
+ * Added timmings for Riverdi BT817@5"                               					    54	-- 01 Sept  2021
  * source: https://riverdi.com/download/RVT50HQBNWC00-B/DS_RVT50HQBNWC00-B_Rev.1.4.pdf                  p-13
- * Add STM32 boards support (for F411CE and F407VG, STM32-Danieleff Core) 		      4073 	-- 13 April 2022
+ * Added STM32 boards support (for F411CE and F407VG, STM32-Danieleff Core) 		 411, 4073 	-- 13 April 2022
  * source: https://github.com/danieleff/STM32GENERIC 
- * Add BT817 for STM32 and teensy 4.1                              							-- 25 June  2022
- * Asset loading fix and renaming library to GDSTx, fixes for VET6, M3DEMO and M4DEMO		-- 31 Aug   2022
- * Add STM32 boards (support for Core7XXI and Nucleo-F767ZI, STM32-Danieleff Core)  746,767	-- 31 Aug   2022
- * Add Matrix Orbital EVE3 BT815@5"		                                                52 	-- 03 Oct   2022
- * Add config.h; entry SizeFT813 renamed to SizeEVE   FT800/FT801-respond                   -- 28 Oct   2022
- * Add support for Core7XXI-F746IG (STM32 Core official 1.9.0, Nucleo F746ZG)         7460  -- 05 Nov   2022 
- * Add support for Nucleo H743ZI and Nucleo F767ZI (STM32 Core official 1.9.0)        7670  -- 05 Nov   2022
+ * Added BT817 for STM32 and teensy 4.1                              							-- 25 June  2022
+ * Asset loading fix and renaming library to GDSTx, fixes for VET6, M3DEMO and M4DEMO		    -- 31 Aug   2022
+ * Added STM32 boards (support for Core7XXI and Nucleo-F767ZI, STM32-Danieleff Core)  746,767	-- 31 Aug   2022
+ * Added Matrix Orbital EVE3 BT815@5"		                                                52 	-- 03 Oct   2022
+ * Added config.h; entry SizeFT813 renamed to SizeEVE   FT800/FT801-respond                     -- 28 Oct   2022
+ * Added support for Core7XXI-F746IG (STM32 Core official 1.9.0, Nucleo F746ZG)         7460    -- 05 Nov   2022 
+ * Added support for Nucleo H743ZI and Nucleo F767ZI (STM32 Core official 1.9.0)        7670    -- 05 Nov   2022
  * json path: https://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json
- * Correction of the timing tables for the NHD TFT-EVE 2                                    -- 07 Nov   2022
+ * Correction of the timing tables for the NHD TFT-EVE 2                                        -- 07 Nov   2022
  * source: https://github.com/NewhavenDisplay/EVE2-TFT-Gamduino2-Library/blob/main/NHD-Gameduino2-AppNotes.pdf
- * Test for Gameduino3-shield on STM32                                                      -- 09 Dec   2022
- * Rename SizeFT813 to SizeEVE and add config.h file                                        -- 06 Jan   2023
- * Update to version 2.01                                                                   -- 06 Jan   2023
- * Add MO EVE3x-43 timings                                                                  -- 06 Jun   2023
- * Add Riverdi RVT70HSBNWN00 timings                                                        -- 29 Nov   2023
+ * Test for Gameduino3-shield on STM32                                                          -- 09 Dec   2022
+ * Rename SizeFT813 to SizeEVE and add config.h file                                            -- 06 Jan   2023
+ * Update to version 2.01                                                                       -- 06 Jan   2023
+ * Added MO EVE3x-43 timings                                                                    -- 06 Jun   2023
+ * Added Riverdi RVT70HSBNWN00 timings                                                          -- 29 Nov   2023
+ * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024
+ * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024 
+ * Added Raspberry Pi Pico RP2040                                                               -- 29 March 2024 
+ * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024 
  */
 //FT81xmania team
 
@@ -73,6 +77,10 @@
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
  
+  	#if (SizeEVE==434)
+		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
+	#endif
+ 
  	#if (SizeEVE==431)
 		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
 		//#define POR_PIN             24	  //06 Junio 2023 Reset-PD Pin   revisar si funciona en EVE3x-43
@@ -90,6 +98,10 @@
 		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
+ 
+	#if (SizeEVE==53)
+		#define POR_PIN             36	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
+	#endif 
  
 #endif
 
@@ -118,6 +130,11 @@
     #define SetSDSpeed       	    36  
   #endif   
   
+  #if(STM32_CPU == 446) 
+    #define SD_PIN         		  PB12  //PB12 SPI2-F411CE   Danieleff-Core          experimental por verificar   
+    #define SetSDSpeed       	    36  
+  #endif     
+  
   #if (STM32_CPU==4110)
     #define SD_PIN         		  PB12  //PB12 SPI2-F411CE   STM32-Core  
     #define SetSDSpeed       	    48  
@@ -128,8 +145,13 @@
     #define SetSDSpeed              48
   #endif  
 
+ #if(STM32_CPU == 4074) 
+    #define SD_PIN          	  PB12  //PB12 SPI2-F407VG            funciona en core STM32 Oficial
+    #define SetSDSpeed              48
+  #endif  
+
   #if(STM32_CPU == 746) 
-     #define SD_PIN        		  PA15  //PA15  SPI3 F429 y Core7XXI          no funciona bien revisar variante    
+     #define SD_PIN        		  PA15  //PA15  SPI3 F429 y Core7XXI          
      #define SetSDSpeed             36  
   #endif
   
@@ -137,7 +159,7 @@
      #define mySerialPort3 SerialUART3
      #define Serial mySerialPort3	  
   
-     #define SD_PIN        		  PB11  //PB11 SPI3-F767, PA11 SPI2-F767      no funciona bien revisar variante
+     #define SD_PIN        		  PB11  //PB11 SPI3-F767, PA11 SPI2-F767      
      #define SetSDSpeed      	    36  
   #endif  
 
@@ -149,13 +171,12 @@
 
 
   #if(STM32_CPU == 7460) 
-     #define SD_PIN        		  PA15  //PA15  SPI3 F429 y Core7XXI          no funciona bien revisar variante    
+     #define SD_PIN        		  PA15  //PA15  SPI3 F429 y Core7XXI          
      #define SetSDSpeed             36  
   #endif
 
 
 #endif                              //*******************************************************STM32 boards setup: EEPROM source, CS-TFT, MCU, SD_PIN, SDSpeed
-
 
 #if defined(ARDUINO_ARCH_STM32)     //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
 
@@ -204,6 +225,10 @@
     #define POR_PIN                PA8	  //Si funciona XD XD F411CE-Black
   #endif  
 
+  #if(STM32_CPU == 446)
+    #define POR_PIN                PA8	  //experimental
+  #endif  
+
   #if(STM32_CPU == 767)
     #define POR_PIN                PA8	  //Si funciona en Nucleo-F767ZI
   #endif    
@@ -216,6 +241,15 @@
 
 #if (SizeEVE==53)
  #define SetSPISpeed   		  36000000
+
+  #if(STM32_CPU == 446)
+    #define POR_PIN                PD2	  //Experimental
+  #endif    
+
+  #if(STM32_CPU == 746)
+    #define POR_PIN                PE0	  //Si funciona en Core7XXI
+  #endif    
+
 #endif
 
 #if (SizeEVE==54)
@@ -228,6 +262,10 @@
   #if(STM32_CPU == 411)
     #define POR_PIN                PA8	  //Si funciona XD XD F411CE-Black
   #endif  
+  
+  #if(STM32_CPU == 446)
+    #define POR_PIN                PA8	  //experimental
+  #endif    
   
   #if(STM32_CPU == 767)
     #define POR_PIN                PA8	  //Si funciona en Nucleo-F767ZI
@@ -252,6 +290,27 @@
 #endif
  
 #endif                              //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
+ 
+#if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
+  #if (SizeEVE==43)
+   #define SetSPISpeed   		  24000000   //SPI-0
+  #endif
+
+  #define SD_PIN 			      13         //SPI-1
+  #define SetSDSpeed       	 	  24
+  
+  #if (SizeEVE==51)                          //Riverdi-FT813 5.1"   7.1"
+   #define SetSPISpeed   		  24000000   //SPI-0
+  #endif
+
+  #if (SizeEVE==5)                          //Riverdi-FT813 5.1"   7.1"
+   #define SetSPISpeed   		  24000000   //SPI-0
+  #endif
+
+  #define SD_PIN 			      13         //SPI-1
+  #define SetSDSpeed       	 	  24  
+  
+#endif                                                        //*******************************************************RP2040-Pico
 
 
 //FT81xmania team
@@ -487,6 +546,10 @@ public:
   
   //BT817
 #if (SizeEVE==54)
+  void cmd_testcard(void);
+#endif  
+
+#if (SizeEVE==434)
   void cmd_testcard(void);
 #endif  
 
@@ -1163,6 +1226,7 @@ if(SizeEVE==431){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}e
 if(SizeEVE==38){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 if(SizeEVE==51){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
 if(SizeEVE==52){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
+if(SizeEVE==434){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==54){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==74){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==71){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
@@ -1177,8 +1241,8 @@ GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);
 }
 }
 }
-    // Delete OPT_FULLSCREEN
-
+}
+    
 GD.flush();
     while (service())
       ;
