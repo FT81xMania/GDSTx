@@ -36,7 +36,8 @@
  * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024
  * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024 
  * Added Raspberry Pi Pico RP2040                                                               -- 29 March 2024 
- * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024 
+ * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024
+ * SdFat/SdFs SD to SdFat/SdFs SSD To avoid conflicts with the SD-Class of SD.h library         -- 14 Nov   2024
  */
 //FT81xmania team
 
@@ -52,6 +53,7 @@
 
 #include "SPI.h"
 #include "SdFat.h"
+
 #include "Arduino.h"
 
 #include "config.h"
@@ -292,12 +294,16 @@
 #endif                              //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
  
 #if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
+
+  #define SD_PIN 			      13         //SPI-1
+  #define SetSDSpeed       	 	  24
+  
   #if (SizeEVE==43)
    #define SetSPISpeed   		  24000000   //SPI-0
   #endif
 
-  #define SD_PIN 			      13         //SPI-1
-  #define SetSDSpeed       	 	  24
+  //#define SD_PIN 			      13         //SPI-1
+  //#define SetSDSpeed       	 	  24
   
   #if (SizeEVE==51)                          //Riverdi-FT813 5.1"   7.1"
    #define SetSPISpeed   		  24000000   //SPI-0
@@ -307,8 +313,12 @@
    #define SetSPISpeed   		  24000000   //SPI-0
   #endif
 
-  #define SD_PIN 			      13         //SPI-1
-  #define SetSDSpeed       	 	  24  
+ #if (SizeEVE==35)                          //NHD-35
+   #define SetSPISpeed   		  24000000   //SPI-0
+  #endif
+
+  //#define SD_PIN 			      13         //SPI-1
+  //#define SetSDSpeed       	 	  24  
   
 #endif                                                        //*******************************************************RP2040-Pico
 
@@ -521,6 +531,10 @@ public:
 
 #if defined(ARDUINO_ARCH_STM32)  
    void printNfloat(int16_t x, int16_t y, float f, int16_t Presc, byte font);
+#endif 
+
+#if defined(ARDUINO_ARCH_RP2040)
+  void printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options);
 #endif 
   
 //  #ifdef TEENSYDUINO

@@ -37,6 +37,7 @@
  * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024
  * Added Raspberry Pi Pico RP2040                                                               -- 29 March 2024
  * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024  
+ * SdFat/SdFs SD to SdFat/SdFs SSD To avoid conflicts with the SD-Class of SD.h library         -- 14 Nov   2024
  */
 //FT81xmania team	
 
@@ -49,11 +50,11 @@
  #include "EEPROM.h"
   #if defined(ARDUINO_TEENSY32)
    //#define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(36))
-   SdFat SD;
+   SdFat SSD;    //In order to avoid conflict declaration with the SD Class of SD.h from teensyduino libraries
    //pinMode(SD_PIN, OUTPUT);
    //digitalWrite(SD_PIN, HIGH);
   #else 
-   SdFs SD; 
+   SdFs SSD; 
   #endif 
 #endif
 
@@ -122,13 +123,13 @@
    //#define SD_CONFIG SdSpiConfig(SD_PIN, ENABLE_DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI_3)
   #endif
 
- SdFs SD;  //type 3
+ SdFs SSD;  //type 3
 #endif 
 
 #if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
    #include "EEPROM.h"
    #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI1)     //Bus SPI-1
-   SdFs SD;                                                              //type 3   
+   SdFs SSD;                                                              //type 3   
 #endif                                                        //*******************************************************RP2040-Pico
 
 
@@ -702,7 +703,7 @@ void GDClass::begin(int cs) {
     //delay(400);  //mejora el inicio de la microSD para videos en la CoreXXI  ----experimental
   #endif  
    //SD.begin( SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(36)) );
-  SD.begin(SD_CONFIG);
+  SSD.begin(SD_CONFIG);
    
 
 #endif	
@@ -711,15 +712,15 @@ void GDClass::begin(int cs) {
  #if defined(ARDUINO_TEENSY32)
    //pinMode(SD_PIN, OUTPUT);
    //digitalWrite(SD_PIN, HIGH);
-   SD.begin(SD_PIN);
+   SSD.begin(SD_PIN);
  #else    
-	SD.begin(SdioConfig(FIFO_SDIO));
+	SSD.begin(SdioConfig(FIFO_SDIO));
  #endif
 #endif
 
 
 #if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
-	SD.begin(SD_CONFIG);
+	SSD.begin(SD_CONFIG);
 #endif                                                        //*******************************************************RP2040-Pico
 
   
@@ -2005,6 +2006,23 @@ if (Presc==7){
 #endif
 
 
+#if defined(ARDUINO_ARCH_RP2040)
+void GDClass::printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options)
+{
+   char doubleNumber[50];
+   char bufNum[25];
+   
+   dtostrf(f, 3, Presc, bufNum);
+   sprintf(doubleNumber,"%s", bufNum);
+   cmd_text(x, y, font, options, doubleNumber);
+   //cmd_text(x, y, font, 0, floatNumber);
+   //cmd_text(x, y, font, OPT_RIGHTX, floatNumber);
+   //cmd_text(x, y, font, OPT_CENTER, floatNumber);
+}
+#endif
+
+
+
 #ifdef TEENSYDUINO
 void GDClass::printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options)
 {
@@ -2400,7 +2418,7 @@ byte GDClass::load(const char *filename, FUNC_POINTER progress)
    //File32 archivo;
  //#define SD_FAT_TYPE 3  //para FAT16/FAT32 and exFAT
    FsFile archivo;
-   archivo = SD.open(filename);
+   archivo = SSD.open(filename);
    //Serial.print(filename);
 //SdFat beta V2
   return (loadSdFat(archivo, progress)); 
