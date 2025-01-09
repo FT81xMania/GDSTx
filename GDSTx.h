@@ -38,6 +38,9 @@
  * Added Raspberry Pi Pico RP2040                                                               -- 29 March 2024 
  * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024
  * SdFat/SdFs SD to SdFat/SdFs SSD To avoid conflicts with the SD-Class of SD.h library         -- 14 Nov   2024
+ * VectorTactil_BT817 example is added to correct use of the BT817 touch panel for the first
+   time. Possible failure between the GDSTx library and the first records of the EEPROM of
+   the teensy 4.1. Later you can use self_calibrate to fine-tune the touch vector               -- 09 Jan   2025
  */
 //FT81xmania team
 

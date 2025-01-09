@@ -38,6 +38,9 @@
  * Added Raspberry Pi Pico RP2040                                                               -- 29 March 2024
  * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024  
  * SdFat/SdFs SD to SdFat/SdFs SSD To avoid conflicts with the SD-Class of SD.h library         -- 14 Nov   2024
+  * VectorTactil_BT817 example is added to correct use of the BT817 touch panel for the first
+   time. Possible failure between the GDSTx library and the first records of the EEPROM of
+   the teensy 4.1. Later you can use self_calibrate to fine-tune the touch vector               -- 09 Jan   2025
  */
 //FT81xmania team	
 
@@ -668,7 +671,7 @@ LOW_FREQ_BOUND =  60000000UL;     // 59000000UL   óptimo
 }
 
 if (SizeEVE==54){                 //BT817/BT818
-LOW_FREQ_BOUND =  60000000UL;     // 59000000UL   óptimo
+LOW_FREQ_BOUND =  59000000UL;     // 59000000UL   óptimo
 }
 
 if (SizeEVE==74){                 //BT817/BT818
@@ -1365,6 +1368,29 @@ if (SizeEVE==5)
 
 
 void GDClass::self_calibrate(void) {
+   
+  if (BT8XX==1)
+ {
+  //Serial.print("FT80");  Serial.println(BT8XX, HEX); //Serial.println(BT8XX, HEX);
+  GDTR.wr(REG_ROTATE, ROTACION);
+  //Serial.println(ROTACION);
+ }
+ 
+ if (BT8XX==19)
+ {
+  //Serial.print("FT8");  Serial.println(BT8XX, HEX); //Serial.println(BT8XX, HEX);
+  cmd_setrotate(ORIENTACION);
+  //Serial.println(ORIENTACION);
+ }
+ 
+ if (BT8XX>19)
+ {
+  //Serial.print("BT8");  Serial.println(BT8XX, HEX); //Serial.println(BT8XX, HEX);
+  cmd_setrotate(ORIENTACION);
+  //Serial.println(ORIENTACION);
+ } 
+  
+  
 	
   #define RAM_TP1 0
     static const unsigned char PROGMEM Tp1[] = 
@@ -1403,7 +1429,18 @@ void GDClass::self_calibrate(void) {
   finish();
   cmd_loadidentity();
   cmd_dlstart();
-  GDTR.flush();
+  GDTR.flush();  
+  
+  
+ // cmd_dlstart();
+ // Clear();
+ // cmd_text(w / 2, h / 2, 30, OPT_CENTER, "please tap on the dot");
+ // cmd_calibrate();
+ // finish();
+ // cmd_loadidentity();
+ // cmd_dlstart();
+ // GDTR.flush();
+
 }
 
 void GDClass::seed(uint16_t n) {
