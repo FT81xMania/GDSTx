@@ -135,6 +135,12 @@
    SdFs SSD;                                                              //type 3   
 #endif                                                        //*******************************************************RP2040-Pico
 
+#if defined(ARDUINO_UNOR4_MINIMA)                             //******************************************************Arduino UNO R4 MINIMA
+   #include "EEPROM.h"
+   #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI1)     //Bus SPI-1
+   SdFs SSD;                                                              //type 3   
+#endif                                                       //*******************************************************Arduino UNO R4 MINIMA
+
 
 //FT81xmania team
 
@@ -1013,6 +1019,31 @@ if (SizeEVE==35)
 	GD.wr32(REG_CSPREAD,  1);//0
 	GD.wr32(REG_DITHER,   1);//0
 	//GD.wr(REG_ROTATE, 0);
+  }
+
+
+if (SizeEVE==510)
+  {
+	  //datasheet    https://www.haoyuelectronics.com/Attachment/HY5-LCD-HD/KD50G21-40NT-A1.pdf
+	cmd_setrotate(ORIENTACION);
+    GD.wr32(REG_HSIZE,   800);   //  thd       visible horizontal line length 
+    GD.wr32(REG_VSIZE,   480);   //  tvd       number of visible lines 
+
+    GD.wr32(REG_HCYCLE,  928 );  //  Th        Period time H One Horizontal Line length (visible/invisible)  Min 889   typ  928    Max    1143
+    GD.wr32(REG_HOFFSET,  88);   //  Thb      HS Back porch           88
+    GD.wr32(REG_HSYNC0,   40);   //  Thfp      HS front porch         Min 1     typ   40    Max    255     
+    GD.wr32(REG_HSYNC1,   48);   //  Thpw       HS pulse width        Min 1     typ   48    Max    255       
+	
+    GD.wr32(REG_VCYCLE,  525);   //  Tv        Period time V          Min 513   typ  525    Max    767
+	GD.wr32(REG_VOFFSET,  32);    // Tvb       VS Back porch          32
+    GD.wr32(REG_VSYNC0,   13);    // Tvfp       VS front porch        Min 1      typ  13    Max    255
+    GD.wr32(REG_VSYNC1,    3);   //  Tvpw       VS pulse width        Min 3      typ   3    Max    255
+
+    GD.wr32(REG_PCLK,      2);   //       
+	GD.wr32(REG_SWIZZLE,   0);   //        
+	GD.wr32(REG_PCLK_POL,  1);   //  
+	GD.wr32(REG_CSPREAD,   0);   // 
+	GD.wr32(REG_DITHER,    1);   //
   }
 
 

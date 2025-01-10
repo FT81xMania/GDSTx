@@ -66,6 +66,22 @@
 #define  H743    					 0        //under test
 #define POR_PIN  					 0        //under test 
 
+
+#ifdef ARDUINO_UNOR4_MINIMA
+  	#if (SizeEVE==5)
+		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
+	#endif 
+	
+  	#if (SizeEVE==510)
+		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
+	    
+	#endif 	
+	
+  #define SD_PIN 			      13         //SPI-1
+  #define SetSDSpeed       	 	  24	
+#endif
+
+
 #ifdef TEENSYDUINO
 
 #if (SizeEVE==0)
