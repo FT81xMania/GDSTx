@@ -49,6 +49,14 @@ digitalWrite(24, HIGH);
 delay(100);
 }
 
+
+if (SizeEVE==510){   //BT817
+pinMode(9, OUTPUT);
+digitalWrite(9, HIGH);    
+delay(100);
+}
+
+
 if (SizeEVE==74){   //BT817
 pinMode(POR_PIN, OUTPUT);
 digitalWrite(POR_PIN, HIGH);    
