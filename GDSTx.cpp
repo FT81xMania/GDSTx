@@ -639,6 +639,11 @@ LOW_FREQ_BOUND =  47040000UL;     //
 //LOW_FREQ_BOUND =    55000000UL; //
 }
 
+if (SizeEVE==510){                //FT810
+LOW_FREQ_BOUND =  47040000UL;     //
+//LOW_FREQ_BOUND =    55000000UL; //
+}
+
 if (SizeEVE==7){                  //FT813
 LOW_FREQ_BOUND =  47040000UL;     //
 }
@@ -1044,6 +1049,27 @@ if (SizeEVE==510)
 	GD.wr32(REG_PCLK_POL,  1);   //  
 	GD.wr32(REG_CSPREAD,   0);   // 
 	GD.wr32(REG_DITHER,    1);   //
+	
+	
+//	  cmd_setrotate(ORIENTACION);
+//    GD.wr32(REG_HCYCLE, 1056);//1056    // 900 //548
+//    GD.wr32(REG_HOFFSET,  46);//88     // 46
+//    GD.wr32(REG_HSIZE,   800);//800
+//    GD.wr32(REG_HSYNC0,    0);//0
+//    GD.wr32(REG_HSYNC1,   10);//10      // 41
+    
+// 	  GD.wr32(REG_VCYCLE,  525);//525     // 500
+//    GD.wr32(REG_VOFFSET,  23);//32     // 23
+//    GD.wr32(REG_VSIZE,   480);//480
+//    GD.wr32(REG_VSYNC0,    0);//0
+//    GD.wr32(REG_VSYNC1,   10);//10
+	
+//    GD.wr32(REG_PCLK,      2);//2
+//	  GD.wr32(REG_SWIZZLE,   0);//0  //3 for GD2
+//    GD.wr32(REG_PCLK_POL,  0);//0
+//    GD.wr32(REG_CSPREAD,   0);//0
+//    GD.wr32(REG_DITHER,    1);//1 	
+	
   }
 
 
@@ -1342,6 +1368,29 @@ if (SizeEVE==5)
     }
  }
 #endif
+
+
+#ifdef ARDUINO_UNOR4_MINIMA
+ if (NHDTouch==1)
+ {  	  	
+  if ((EEPROM.read(0) == 0)) 
+   {
+      self_calibrate();
+      for (int i = 0; i < 24; i++)
+        {
+         EEPROM.write(1 + i, GDTR.rd(REG_TOUCH_TRANSFORM_A + i));
+        }
+      EEPROM.write(0, 0x1);
+    } else {
+      for (int i = 0; i < 24; i++)
+        {
+         GDTR.wr(REG_TOUCH_TRANSFORM_A + i, EEPROM.read(1 + i));
+        }
+           }	
+  }
+#endif
+
+
 
   GDTR.wr16(REG_TOUCH_RZTHRESH, 1200);
 

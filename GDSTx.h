@@ -114,6 +114,10 @@
   	#if (SizeEVE==5)
 		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
 	#endif 
+	
+  	#if (SizeEVE==510)
+		#define SetSPISpeed   36000000    // reducir al valor si la pantalla no enciende o es inestable con gráficos lineales contínuos y/o reproducción de videos
+	#endif 	
  
 	#if (SizeEVE==52)
 		#define SetSPISpeed   32000000    // reducir al valor óptimo= 32000000, 36000000 es inestable con gráficos lineales contínuos y reproducción de videos
@@ -1258,6 +1262,7 @@ if(SizeEVE==43){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}el
 if(SizeEVE==431){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 if(SizeEVE==38){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 if(SizeEVE==51){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
+if(SizeEVE==5){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 if(SizeEVE==52){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
 if(SizeEVE==434){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==54){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
@@ -1269,6 +1274,7 @@ GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);
    }
   }
  }
+}
 }
 }
 }
