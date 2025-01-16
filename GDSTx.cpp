@@ -1266,23 +1266,42 @@ if (SizeEVE==5)
     //GD.wr32(REG_DITHER,    1);      
 	
 	cmd_setrotate(ORIENTACION);
-    GD.wr32(REG_HCYCLE, 1056);//1056    // 900 //548
-    GD.wr32(REG_HOFFSET,  46);//88     // 46
-    GD.wr32(REG_HSIZE,   800);//800
-    GD.wr32(REG_HSYNC0,    0);//0
-    GD.wr32(REG_HSYNC1,   10);//10      // 41
+    GD.wr32(REG_HSIZE,    800);//
+	GD.wr32(REG_HCYCLE,  1056);// with 928 = artifacs in sprite example   https://newhavendisplay.com/content/specs/NHD-5.0-800480FT-CSXP-CTP.pdf  or  https://support.newhavendisplay.com/hc/en-us/article_attachments/27151786567319
+    GD.wr32(REG_HOFFSET,   88);//
+    GD.wr32(REG_HSYNC0,     0);//
+    GD.wr32(REG_HSYNC1,    48);//
     
-	GD.wr32(REG_VCYCLE,  525);//525     // 500
-    GD.wr32(REG_VOFFSET,  23);//32     // 23
-    GD.wr32(REG_VSIZE,   480);//480
-    GD.wr32(REG_VSYNC0,    0);//0
-    GD.wr32(REG_VSYNC1,   10);//10
+	GD.wr32(REG_VSIZE,   480);//
+	GD.wr32(REG_VCYCLE,  525);//
+    GD.wr32(REG_VOFFSET,  32);//
+    GD.wr32(REG_VSYNC0,    0);//
+    GD.wr32(REG_VSYNC1,    3);//
 	
     GD.wr32(REG_PCLK,      2);//2
 	GD.wr32(REG_SWIZZLE,   0);//0  //3 for GD2
     GD.wr32(REG_PCLK_POL,  0);//0
     GD.wr32(REG_CSPREAD,   0);//0
     GD.wr32(REG_DITHER,    1);//1     
+	
+	//GD.wr32(REG_HSIZE,   800);//
+    //GD.wr32(REG_HCYCLE, 1056);//
+    //GD.wr32(REG_HOFFSET,  46);//
+    //GD.wr32(REG_HSYNC0,    0);//
+    //GD.wr32(REG_HSYNC1,   10);//
+    
+	//GD.wr32(REG_VSIZE,   480);//
+	//GD.wr32(REG_VCYCLE,  525);//
+    //GD.wr32(REG_VOFFSET,  23);//
+    //GD.wr32(REG_VSYNC0,    0);//
+    //GD.wr32(REG_VSYNC1,   10);//
+	
+    //GD.wr32(REG_PCLK,      2);//2
+	//GD.wr32(REG_SWIZZLE,   0);//0  //3 for GD2
+    //GD.wr32(REG_PCLK_POL,  0);//0
+    //GD.wr32(REG_CSPREAD,   0);//0
+    //GD.wr32(REG_DITHER,    1);//1     	
+	
   }
 
   }

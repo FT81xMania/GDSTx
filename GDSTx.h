@@ -77,7 +77,7 @@
 	    
 	#endif 	
 	
-  #define SD_PIN 			      13         //SPI-1
+  #define SD_PIN 			       8         //SPI-1
   #define SetSDSpeed       	 	  24	
 #endif
 
@@ -1262,7 +1262,7 @@ if(SizeEVE==43){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}el
 if(SizeEVE==431){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 if(SizeEVE==38){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 if(SizeEVE==51){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
-if(SizeEVE==5){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
+//if(SizeEVE==5){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 if(SizeEVE==52){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
 if(SizeEVE==434){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==54){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
@@ -1274,7 +1274,7 @@ GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);
    }
   }
  }
-}
+//}
 }
 }
 }
