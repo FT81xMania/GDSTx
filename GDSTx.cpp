@@ -737,6 +737,10 @@ void GDClass::begin(int cs) {
 	SSD.begin(SD_CONFIG);
 #endif                                                        //*******************************************************RP2040-Pico
 
+
+#if defined(ARDUINO_UNOR4_MINIMA)                              //*******************************************************ARDUINO_UNOR4_MINIMA
+	SSD.begin(SD_CONFIG);
+#endif                                                        //*******************************************************ARDUINO_UNOR4_MINIMA
   
   //begin1:
   GDTR.begin1();
@@ -1389,7 +1393,7 @@ if (SizeEVE==5)
 #endif
 
 
-#ifdef ARDUINO_UNOR4_MINIMA
+#if defined(ARDUINO_UNOR4_MINIMA)
  if (NHDTouch==1)
  {  	  	
   if ((EEPROM.read(0) == 0)) 
@@ -2143,6 +2147,22 @@ if (Presc==7){
 
 
 #if defined(ARDUINO_ARCH_RP2040)
+void GDClass::printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options)
+{
+   char doubleNumber[50];
+   char bufNum[25];
+   
+   dtostrf(f, 3, Presc, bufNum);
+   sprintf(doubleNumber,"%s", bufNum);
+   cmd_text(x, y, font, options, doubleNumber);
+   //cmd_text(x, y, font, 0, floatNumber);
+   //cmd_text(x, y, font, OPT_RIGHTX, floatNumber);
+   //cmd_text(x, y, font, OPT_CENTER, floatNumber);
+}
+#endif
+
+
+#if defined(ARDUINO_UNOR4_MINIMA)
 void GDClass::printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options)
 {
    char doubleNumber[50];

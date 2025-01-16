@@ -559,6 +559,10 @@ public:
 #if defined(ARDUINO_ARCH_RP2040)
   void printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options);
 #endif 
+
+#if defined(ARDUINO_UNOR4_MINIMA)
+  void printNfloat(int16_t x, int16_t y, double f, int16_t Presc, byte font, uint16_t options);
+#endif 
   
 //  #ifdef TEENSYDUINO
 //  void printNfloat2(int16_t x, int16_t y, float f, int16_t Presc, byte font);
