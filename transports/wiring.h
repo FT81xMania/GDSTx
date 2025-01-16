@@ -90,6 +90,13 @@ delay(100);
     digitalWrite(SD_PIN, HIGH);
   #endif
 
+
+#if defined(ARDUINO_UNOR4_MINIMA)
+	pinMode(SD_PIN, OUTPUT);
+    digitalWrite(SD_PIN, HIGH);
+  #endif
+
+
     SPI.begin();
     SPI.beginTransaction(SPISettings(SetSPISpeed, MSBFIRST, SPI_MODE0));
 
