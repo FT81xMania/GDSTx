@@ -46,13 +46,17 @@
 
 #include <Arduino.h>
 #include "SPI.h"
+
+#if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
+ #define DISABLE_FS_H_WARNING  // Disable warning for type File not defined.
+#endif
 #include "SdFat.h"
 #include <GDSTx.h>
 
 #ifdef TEENSYDUINO 
  #include "EEPROM.h"
   #if defined(ARDUINO_TEENSY32)
-   //#define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(36))
+   #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(18))
    SdFat SSD;    //In order to avoid conflict declaration with the SD Class of SD.h from teensyduino libraries
    //pinMode(SD_PIN, OUTPUT);
    //digitalWrite(SD_PIN, HIGH);
@@ -137,7 +141,7 @@
 
 #if defined(ARDUINO_UNOR4_MINIMA)                             //******************************************************Arduino UNO R4 MINIMA
    #include "EEPROM.h"
-   #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed), &SPI1)     //Bus SPI-1
+   #define SD_CONFIG SdSpiConfig(SD_PIN, DEDICATED_SPI, SD_SCK_MHZ(SetSDSpeed))     //Bus SPI-1
    SdFs SSD;                                                              //type 3   
 #endif                                                       //*******************************************************Arduino UNO R4 MINIMA
 
@@ -726,6 +730,7 @@ void GDClass::begin(int cs) {
  #if defined(ARDUINO_TEENSY32)
    //pinMode(SD_PIN, OUTPUT);
    //digitalWrite(SD_PIN, HIGH);
+   //SSD.begin(SD_CONFIG);
    SSD.begin(SD_PIN);
  #else    
 	SSD.begin(SdioConfig(FIFO_SDIO));

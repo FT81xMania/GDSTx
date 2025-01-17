@@ -49,12 +49,15 @@
 
 //FT81xmania team
 
-#define GDT4Xv134_VERSION  "2.1 T4x-STM32"
-#define GD23X_VERSION      "2.1 T4x-STM32"
-#define GD23ZUTX_VERSION   "2.1 T4x-STM32"
-#define GDSTx_VERSION      "2.1 T4x-STM32"
+#define GDT4Xv134_VERSION  "2.2 T4x-STM32-RPiPico"
+#define GD23X_VERSION      "2.2 T4x-STM32-RPiPico"
+#define GD23ZUTX_VERSION   "2.2 T4x-STM32-RPiPico"
+#define GDSTx_VERSION      "2.2 T4x-STM32-RPiPico"
 
 #include "SPI.h"
+#if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
+ #define DISABLE_FS_H_WARNING  // Disable warning for type File not defined.
+#endif
 #include "SdFat.h"
 
 #include "Arduino.h"
@@ -337,7 +340,7 @@
   #endif
 
  #if (SizeEVE==35)                          //NHD-35
-   #define SetSPISpeed   		  24000000   //SPI-0
+   #define SetSPISpeed   		  36000000   //SPI-0
   #endif
 
   //#define SD_PIN 			      13         //SPI-1

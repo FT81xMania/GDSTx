@@ -31,7 +31,7 @@
 
 #if defined(ARDUINO_TEENSY32)
   //#define SetSPISpeed   18000000   // general
-  #define SD_PIN 			 	 7   //under test
+  #define SD_PIN 			 	 5   //under test
 #endif
 
 #if defined(ARDUINO_ARCH_RP2040)
