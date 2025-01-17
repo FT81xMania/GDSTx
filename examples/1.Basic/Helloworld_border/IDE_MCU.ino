@@ -61,16 +61,11 @@ void IDEMCU()
 
   #if defined(ARDUINO_ARCH_RP2040)
      ClaveBoard=6;
-     sprintf(Board, "MCU: R-Pi PICO");
+     sprintf(Board, "MCU: R-Pi Pico");
   #endif
-
-  #if defined(ARDUINO_UNOR4_MINIMA)
+  
+  #if !defined(TEENSYDUINO)&& !defined(ESP32)&& !defined(__DUE__)&& !defined(ESP8266)&& !defined(ARDUINO_ARCH_STM32)&& !defined(ARDUINO_ARCH_RP2040)&& defined(ARDUINO)
      ClaveBoard=7;
-     sprintf(Board, "MCU: UNO R4 MINIMA");
-  #endif
-
-  #if !defined(TEENSYDUINO)&& !defined(ESP32)&& !defined(__DUE__)&& !defined(ESP8266)&& !defined(ARDUINO_ARCH_STM32)&& !defined(ARDUINO_UNOR4_MINIMA)&& !defined(ARDUINO_ARCH_RP2040)&& defined(ARDUINO)
-     ClaveBoard=8;
      sprintf(Board, "MCU: Arduino MEGA/UNO");
   #endif
 }
