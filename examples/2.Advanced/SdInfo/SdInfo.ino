@@ -37,6 +37,11 @@ const int8_t DISABLE_CS_PIN = -1;
 #endif
 #endif
 
+#if defined(ARDUINO_ARCH_RP2040)
+  //const uint8_t SD_PIN = 13;         //SPI-1
+  #define SD_CONFIG SdSpiConfig(13, DEDICATED_SPI, SD_SCK_MHZ(24), &SPI1)     //Bus SPI-1
+#endif
+
 //------------------------------------------------------------------------------
 SdFs sd;
 cid_t cid;
