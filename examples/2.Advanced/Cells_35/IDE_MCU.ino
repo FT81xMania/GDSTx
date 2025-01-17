@@ -49,8 +49,13 @@ void IDEMCU()
      sprintf(Board, "MCU: ESP32");
   #endif
 
-  #if !defined(TEENSYDUINO)&& !defined(ESP32)&& !defined(__DUE__)&& !defined(ESP8266)&& !defined(ARDUINO_ARCH_STM32)&& defined(ARDUINO)
+  #if defined(ARDUINO_ARCH_RP2040)
      ClaveBoard=6;
+     sprintf(Board, "MCU: R-Pi Pico");
+  #endif
+  
+  #if !defined(TEENSYDUINO)&& !defined(ESP32)&& !defined(__DUE__)&& !defined(ESP8266)&& !defined(ARDUINO_ARCH_STM32)&& !defined(ARDUINO_ARCH_RP2040)&& defined(ARDUINO)
+     ClaveBoard=7;
      sprintf(Board, "MCU: Arduino MEGA/UNO");
   #endif
 }
