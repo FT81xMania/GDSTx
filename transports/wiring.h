@@ -50,7 +50,7 @@ delay(100);
 }
 
 
-if (SizeEVE==510){   //BT817
+if (SizeEVE==510){   //FT810
 pinMode(9, OUTPUT);
 digitalWrite(9, HIGH);    
 delay(100);
