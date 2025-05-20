@@ -80,10 +80,7 @@ delay(100);
 	//SD.begin(SD_PIN);
   #endif
 
-#if defined(ARDUINO_ARCH_STM32)
-	pinMode(SD_PIN, OUTPUT);
-    digitalWrite(SD_PIN, HIGH);
-  #endif
+
 
 #if defined(ARDUINO_ARCH_RP2040)
 	pinMode(SD_PIN, OUTPUT);
@@ -96,7 +93,12 @@ delay(100);
     digitalWrite(SD_PIN, HIGH);
   #endif
 
-
+#if defined(ARDUINO_ARCH_STM32)
+	pinMode(SD_PIN, OUTPUT);
+    digitalWrite(SD_PIN, HIGH);
+  #endif
+  
+  
     SPI.begin();
     SPI.beginTransaction(SPISettings(SetSPISpeed, MSBFIRST, SPI_MODE0));
 
