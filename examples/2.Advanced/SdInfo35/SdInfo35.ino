@@ -26,6 +26,14 @@ const int8_t DISABLE_CS_PIN = -1;
    #define Serial mySerialPort2
   #endif
 
+  #if (STM32_CPU==4073)
+   const uint8_t SD_CS_PIN = PB12;
+   static SPIClass SPI_2(SPI2, PB15, PB14, PB10);
+   #define SD_CONFIG SdSpiConfig(SD_CS_PIN, DEDICATED_SPI, SD_SCK_MHZ(18), &SPI_2)
+   #define mySerialPort2 SerialUART2
+   #define Serial mySerialPort2
+  #endif 
+
   #if (STM32_CPU==767)
    const uint8_t SD_CS_PIN = PB11;
    static SPIClass SPI_3(SPI3, PB2, PB4, PB3);
