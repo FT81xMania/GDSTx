@@ -1,7 +1,7 @@
 #include <GDSTx.h>
-                     //       0       1         2
-char MCUTXT[60][22]={"F411CE", "Teesy 4.1", "R-Pi Pico"};
-int MCUbase=1;
+                     //       0       1         2               3
+char MCUTXT[60][22]={"F411CE", "Teesy 4.1", "R-Pi Pico", "Black F446RE"};
+int MCUbase=3 ;
 
 Bitmap Background,SaidHello;
 
