@@ -11,8 +11,10 @@ void IDEMCU()
      sprintf(Board, "MCU(%d): STM32 Nucleo-F767ZI", ClaveBoard);
      if (STM32_CPU==4070){sprintf(Board, "MCU: STM32 F407 M4DEMO_SD"); MCUID=4070;}
      if (STM32_CPU==4071){sprintf(Board, "MCU: STM32FX_SDIO"); MCUID=4071;}
+     if (STM32_CPU==4073){sprintf(Board, "MCU: M4DEMO/407VG"); MCUID=4073;}
 	   if (STM32_CPU==411){sprintf(Board, "MCU: STM32F411 BlackPill"); MCUID=411;}
-     if (STM32_CPU==429){sprintf(Board, "MCU: STM32 F429I-DISCO"); MCUID=429;}
+     if (STM32_CPU==429){sprintf(Board, "MCU: F446 Black"); MCUID=429;}
+     if (STM32_CPU==446){sprintf(Board, "MCU: Black F446RE"); MCUID=446;}
      if (STM32_CPU==767){sprintf(Board, "MCU: STM32 Nucleo-F767ZI(Danieleff Core)"); MCUID=767;}
      if (STM32_CPU==7670)
         {
