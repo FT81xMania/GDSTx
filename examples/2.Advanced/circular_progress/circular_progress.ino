@@ -110,7 +110,7 @@ void cgaugef(float x, float y, float r, float fill, uint32_t colorextern, uint32
 
   GD.SaveContext();
    GD.ColorRGB(colortext);
-   //GD.printNfloat(x, y-15,fill,1,sizeTXT);
+   //GD.printNfloat(x, y-15,fill,1,sizeTXT);  //STM32
    GD.printNfloat(x, y-15,fill,1,sizeTXT,0);
    GD.cmd_text(x, y+r*0.3, sizeTXT, OPT_CENTER, "%");
   GD.RestoreContext();
@@ -143,7 +143,7 @@ void cPie(float x, float y, float r, float fill, uint32_t colorextern, uint32_t 
    GD.ColorRGB(colortext);
    //GD.printNfloat(x+(r*cos(angle*3.1415/180))+r*(0), y-(r*0)-r*sin(angle*3.1415/180),fill,1,sizeTXT);
    GD.printNfloat(x+(r*cos(angle*3.1415/180))+r*(0), y-(r*0)-r*sin(angle*3.1415/180),fill,1,sizeTXT,0);
-   //GD.printNfloat(x+r*.5, y+15,100-fill,1,sizeTXT);
+   //GD.printNfloat(x+r*.5, y+15,100-fill,1,sizeTXT);  //STM32
    GD.printNfloat(x+r*.5, y+15,100-fill,1,sizeTXT,0);
    GD.cmd_text(x, y, sizeTXT, OPT_CENTER, "%");
   GD.RestoreContext();
