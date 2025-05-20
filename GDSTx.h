@@ -33,7 +33,6 @@
  * Update to version 2.01                                                                       -- 06 Jan   2023
  * Added MO EVE3x-43 timings                                                                    -- 06 Jun   2023
  * Added Riverdi RVT70HSBNWN00 timings                                                          -- 29 Nov   2023
- * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024
  * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024 
  * Added Raspberry Pi Pico RP2040                                                               -- 29 March 2024 
  * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024
@@ -58,6 +57,11 @@
 #if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
  #define DISABLE_FS_H_WARNING  // Disable warning for type File not defined.
 #endif
+
+#if defined(ARDUINO_ARCH_STM32)  
+ #define DISABLE_FS_H_WARNING  // Disable warning for type File not defined.
+#endif
+
 #include "SdFat.h"
 
 #include "Arduino.h"
@@ -84,12 +88,40 @@
   #define SetSDSpeed       	 	  24	
 #endif
 
+#if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
+
+  #define SD_PIN 			      13         //SPI-1
+  #define SetSDSpeed       	 	  24
+  
+  #if (SizeEVE==43)
+   #define SetSPISpeed   		  24000000   //SPI-0
+  #endif
+
+  //#define SD_PIN 			      13         //SPI-1
+  //#define SetSDSpeed       	 	  24
+  
+  #if (SizeEVE==51)                          //Riverdi-FT813 5.1"   7.1"
+   #define SetSPISpeed   		  24000000   //SPI-0
+  #endif
+
+  #if (SizeEVE==5)                          //Riverdi-FT813 5.1"   7.1"
+   #define SetSPISpeed   		  24000000   //SPI-0
+  #endif
+
+ #if (SizeEVE==35)                          //NHD-35
+   #define SetSPISpeed   		  36000000   //SPI-0
+  #endif
+
+  //#define SD_PIN 			      13         //SPI-1
+  //#define SetSDSpeed       	 	  24  
+  
+#endif                                                        //*******************************************************RP2040-Pico
 
 #ifdef TEENSYDUINO
 
 #if (SizeEVE==0)
- #define SetSPISpeed   		  29000000   // 29000000 --- gameduino3 shield
- //#define SetSPISpeed   		  30000000   // 30000000 --- specific FT801/FT800
+ //#define SetSPISpeed   		  29000000   // 29000000 --- gameduino3 shield
+ #define SetSPISpeed   		  20000000   //  --- specific FT801/FT800
  //#define POR_PIN                  33   //No conectar
 #endif
 
@@ -224,7 +256,7 @@
  #define SetSPISpeed   		  36000000   //36000000   
 
  #if(STM32_CPU == 103) 
-  #define SetSPISpeed  		  36000000   //para 29-F103VET6
+  #define SetSPISpeed  		  29000000   //para 29-F103VET6
  #endif 
   
 #endif
@@ -319,34 +351,7 @@
  
 #endif                              //*******************************************************STM32 boards Size-TFT, SPI-TFT-Speed, orientation, PD/Reset-pin (POR)
  
-#if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
 
-  #define SD_PIN 			      13         //SPI-1
-  #define SetSDSpeed       	 	  24
-  
-  #if (SizeEVE==43)
-   #define SetSPISpeed   		  24000000   //SPI-0
-  #endif
-
-  //#define SD_PIN 			      13         //SPI-1
-  //#define SetSDSpeed       	 	  24
-  
-  #if (SizeEVE==51)                          //Riverdi-FT813 5.1"   7.1"
-   #define SetSPISpeed   		  24000000   //SPI-0
-  #endif
-
-  #if (SizeEVE==5)                          //Riverdi-FT813 5.1"   7.1"
-   #define SetSPISpeed   		  24000000   //SPI-0
-  #endif
-
- #if (SizeEVE==35)                          //NHD-35
-   #define SetSPISpeed   		  36000000   //SPI-0
-  #endif
-
-  //#define SD_PIN 			      13         //SPI-1
-  //#define SetSDSpeed       	 	  24  
-  
-#endif                                                        //*******************************************************RP2040-Pico
 
 
 //FT81xmania team

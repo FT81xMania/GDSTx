@@ -34,7 +34,6 @@
  * Added MO EVE3x-43 timings                                                                    -- 06 Jun   2023
  * Added Riverdi RVT70HSBNWN00 timings                                                          -- 29 Nov   2023
  * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024
- * Added STM32 board support: Black F446RE (Danieleff Core) 		                       446 	-- 14 Feb   2024
  * Added Raspberry Pi Pico RP2040                                                               -- 29 March 2024
  * Added MO 5" BT815 (SizeEVE=53)                                                               -- 19 May   2024  
  * SdFat/SdFs SD to SdFat/SdFs SSD To avoid conflicts with the SD-Class of SD.h library         -- 14 Nov   2024
@@ -50,6 +49,11 @@
 #if defined(ARDUINO_ARCH_RP2040)                              //*******************************************************RP2040-Pico
  #define DISABLE_FS_H_WARNING  // Disable warning for type File not defined.
 #endif
+
+#if defined(ARDUINO_ARCH_STM32)  
+ #define DISABLE_FS_H_WARNING  // Disable warning for type File not defined.
+#endif
+
 #include "SdFat.h"
 #include <GDSTx.h>
 
@@ -785,7 +789,7 @@ void GDClass::begin(int cs) {
     #endif	
   
   
- //FT801 XD
+
  if (SizeEVE==0)
  {
 	 #if 0
@@ -798,12 +802,12 @@ if (GameduinoX==1){
     cmd_regwrite(REG_OUTBITS,  666);
     cmd_regwrite(REG_DITHER,     1);
     cmd_regwrite(REG_ROTATE,     ROTACION);
-    cmd_regwrite(REG_SWIZZLE,    3); //3 gameduino 23X   0 FT801/FT800/FT81x
-    cmd_regwrite(REG_PCLK_POL,   1); //1 gameduino 23X   0 FT801/FT800/FT81x
+    cmd_regwrite(REG_SWIZZLE,    3); //3 gameduino 23X   
+    cmd_regwrite(REG_PCLK_POL,   1); //1 gameduino 23X   
     cmd_regwrite(REG_PCLK,       5);
    }
 
-//NHD43 and FT843
+//NHD43 and FT843    FT801
 if (GameduinoX==0){
 	GD.wr32(REG_HCYCLE,        548);
 	GD.wr32(REG_VCYCLE,        292);    
@@ -816,7 +820,7 @@ if (GameduinoX==0){
    }
 	
  }
- //FT801 XD
+
 
 //TFT Riverdi 5"
 if (SizeEVE==51){
@@ -2649,7 +2653,7 @@ byte GDClass::loadSdFat(FsFile& archivo, FUNC_POINTER progress)
      //SPI_2.endTransaction(SD_PIN);
   #endif    	
 
-  #if(STM32_CPU == 4074)
+  #if(STM32_CPU == 446)
      //SPI_2.endTransaction(SD_PIN);
   #endif
 
@@ -2677,7 +2681,7 @@ byte GDClass::loadSdFat(FsFile& archivo, FUNC_POINTER progress)
      //SPI_2.endTransaction(SD_PIN);
   #endif      
   
-  #if(STM32_CPU == 4074)
+  #if(STM32_CPU == 446)
      //SPI_2.endTransaction(SD_PIN);
   #endif  
   
