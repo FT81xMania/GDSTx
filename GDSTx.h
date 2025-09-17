@@ -129,6 +129,10 @@
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
  
+	#if (SizeEVE==100)
+		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
+	#endif 
+ 
  	#if (SizeEVE==74)
 		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif
@@ -160,7 +164,7 @@
 	#endif
  
 	#if (SizeEVE==53)
-		#define POR_PIN             36	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
+		#define POR_PIN             24	  // 03 Junio 2022 THX hermano!. Funciona para teensy 3.6 XD XD   también funciona en teensy 4.1 XD XD   Reset-PD Pin
 	#endif 
  
 #endif

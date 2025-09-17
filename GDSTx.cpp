@@ -153,7 +153,7 @@
 //FT81xmania team
 
 byte ft8xx_model;
-uint16_t BT8XX; // 0x00:FT800/0x10:FT810/0x11:FT811/0x12:FT812/0x13:FT813/0x15:BT815/0x16:BT816/0x17:BT817
+uint16_t BT8XX; // 0x00:FT800/0x10:FT810/0x11:FT811/0x12:FT812/0x13:FT813/0x15:BT815/0x16:BT816/0x17:BT817     Función interna de la libreria
 #include "transports/wiring.h"
 
 ////////////////////////////////////////////////////////////////////////
@@ -960,8 +960,8 @@ if (SizeEVE==74){
 //TFT Riverdi 7"             EVE4     Datasheet Rev.1.7 2022-11-30   p.14/19      BT817
 
 
-//TFT Riverdi 10"             EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21
-if (SizeEVE==100){
+//TFT Riverdi 10"    12.1"            EVE4     Datasheet Rev.0.1 2020-12-29   p.15/21
+if (SizeEVE==100){                    //  Experimental
 	cmd_setrotate(ORIENTACION);
     GD.wr32(REG_HSIZE,  1280);   //      Thd       visible horizontal line length 
     GD.wr32(REG_VSIZE,   800);   //      Tvd       number of visible lines 
@@ -976,14 +976,13 @@ if (SizeEVE==100){
     GD.wr32(REG_VSYNC0,   15);   //4   8   12   12   Tvfp      VS front porch         
     GD.wr32(REG_VSYNC1,    4);   //2   4   8    8   Tvpw/Tvw  VS pulse width         
 
-    GD.wr32(REG_PCLK,      2);   //2, 1, 0       1:REG_PCLK_FREQ
-	GD.wr32(REG_PCLK_FREQ, 0);   //0   
-	GD.wr32(REG_PCLK_2X,   0);   //0,1
-    GD.wr32(REG_SWIZZLE,   0);   //0 1  3
-    GD.wr32(REG_PCLK_POL,  1);   //1, 0
-    GD.wr32(REG_CSPREAD,   1);   //1,0
-    GD.wr32(REG_DITHER,    1);           //1, 0
-	GD.wr32(REG_OUTBITS,   0x360);      //0x360  0xff0
+    GD.wr32(REG_PCLK,      1);   //2, 1, 0       1:REG_PCLK_FREQ
+	GD.wr32(REG_SWIZZLE,   0);   //0 1  3
+	GD.wr32(REG_PCLK_POL,  1);         //1, 0    0 to off vertical lines on horizontal gradients    1
+	GD.wr32(REG_CSPREAD,   0);          //0                                          0                 
+	GD.wr32(REG_DITHER,    1);           //1, 0                                      1
+	GD.wr32(REG_PCLK_FREQ, 0xD14);    //0                                        0xD14
+
 	//cmd_regwrite(REG_PWM_DUTY, 128);
 }
 //TFT Riverdi 10"   EVE4
