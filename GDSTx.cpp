@@ -698,7 +698,7 @@ LOW_FREQ_BOUND =  60000000UL;     // 59000000UL   óptimo
 }
 
 if (SizeEVE==100){                //BT817/BT818
-LOW_FREQ_BOUND =  60000000UL;     //  59000000UL   óptimo
+LOW_FREQ_BOUND =  59000000UL;     //  59000000UL   óptimo
 }
  
  //Serial.println("****");
@@ -967,7 +967,7 @@ if (SizeEVE==100){                    //  Experimental
     GD.wr32(REG_VSIZE,   800);   //      Tvd       number of visible lines 
 
     GD.wr32(REG_HCYCLE, 1440);   //808 816 896  816 Th        One Horizontal Line length (visible/invisible)
-    GD.wr32(REG_HOFFSET,  88);   //4   8   48   8   Thb       HS Blanking            
+    GD.wr32(REG_HOFFSET,  88);   //4   8   48   8   Thbp       HS Blanking            
     GD.wr32(REG_HSYNC0,   72);   //4   8   48   8   Thfp      HS front porch         
     GD.wr32(REG_HSYNC1,    4);   //2   4   8    4   Thpw/Thw  HS pulse width         
 	
@@ -1280,13 +1280,13 @@ if (SizeEVE==5)
 	cmd_setrotate(ORIENTACION);
     GD.wr32(REG_HSIZE,    800);//
 	GD.wr32(REG_HCYCLE,  1056);// with 928 = artifacs in sprite example   https://newhavendisplay.com/content/specs/NHD-5.0-800480FT-CSXP-CTP.pdf  or  https://support.newhavendisplay.com/hc/en-us/article_attachments/27151786567319
-    GD.wr32(REG_HOFFSET,   88);//
+    GD.wr32(REG_HOFFSET,   10);//    88
     GD.wr32(REG_HSYNC0,     0);//
     GD.wr32(REG_HSYNC1,    48);//
     
 	GD.wr32(REG_VSIZE,   480);//
 	GD.wr32(REG_VCYCLE,  525);//
-    GD.wr32(REG_VOFFSET,  32);//
+    GD.wr32(REG_VOFFSET,  10);//            32
     GD.wr32(REG_VSYNC0,    0);//
     GD.wr32(REG_VSYNC1,    3);//
 	
@@ -2297,6 +2297,13 @@ void GDClass::cmd_testcard(void) {
 
 //BT817
 #if (SizeEVE==54)
+void GDClass::cmd_testcard(void) {
+  cFFFFFF(0x61);
+}
+#endif
+
+//BT817
+#if (SizeEVE==100)
 void GDClass::cmd_testcard(void) {
   cFFFFFF(0x61);
 }

@@ -602,6 +602,10 @@ public:
   void cmd_testcard(void);
 #endif  
 
+#if (SizeEVE==100)
+  void cmd_testcard(void);
+#endif  
+
 #if (SizeEVE==434)
   void cmd_testcard(void);
 #endif  
@@ -1282,6 +1286,7 @@ if(SizeEVE==51){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}el
 if(SizeEVE==52){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{ 
 if(SizeEVE==434){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==54){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
+if(SizeEVE==100){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==74){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);}else{ 
 if(SizeEVE==71){GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_FULLSCREEN | OPT_SOUND);}else{
 GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);
@@ -1290,7 +1295,7 @@ GD.cmd_playvideo(OPT_MEDIAFIFO | OPT_SOUND);
    }
   }
  }
-//}
+}
 }
 }
 }
