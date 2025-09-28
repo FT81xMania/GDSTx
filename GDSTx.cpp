@@ -1427,7 +1427,15 @@ if (SizeEVE==5)
 
   rseed = 0x77777777;
   cprim = 0xff;
-  vxf = 4;
+  
+  vxf = 4;  //4
+  GD.VertexFormat(4);
+  //SizeEVE==100
+  if (SizeEVE==100)
+  {
+    vxf = 3;  //4
+    GD.VertexFormat(3);
+  }
 
  tune();
    
@@ -1989,7 +1997,16 @@ void GDClass::cmd_dial(int16_t x, int16_t y, int16_t r, uint16_t options, uint16
 void GDClass::cmd_dlstart(void) {
   cFFFFFF(0x00);
   cprim = 0xff;
-  vxf = 4;
+  
+  vxf = 4;  //4
+  GD.VertexFormat(4);
+  //SizeEVE==100
+  if (SizeEVE==100)
+  {
+    vxf = 3;  //4
+    GD.VertexFormat(3);
+  }  
+
 }
 void GDClass::cmd_fgcolor(uint32_t c) {
   cFFFFFF(0x0a);
